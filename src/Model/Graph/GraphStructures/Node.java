@@ -2,7 +2,6 @@ package Model.Graph.GraphStructures;
 
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class Node<T,V> {
@@ -21,11 +20,11 @@ public class Node<T,V> {
         this.tag = 0;
     }
 
-    public List<Arc<T,V>> getInArc(){
+    public List<Arc<T,V>> getInArcs(){
         return inArcs;
     }
 
-    public List<Arc<T,V>> getOutArc(){
+    public List<Arc<T,V>> getOutArcs(){
         return outArcs;
     }
 

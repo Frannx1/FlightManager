@@ -1,7 +1,5 @@
 package Model.Graph.GraphStructures;
 
-import java.util.List;
-
 public class Arc<T,V> {
 
     private Node<T,V> origin;
