@@ -53,8 +53,16 @@ public class Airport {
         inFlights.add(flight);
     }
 
+    public void removeInFlight(Flight flight) {
+        inFlights.remove(flight);
+    }
+
     public void addOutFlight(Flight flight) {
         outFlights.add(flight);
+    }
+
+    public void removeOutFlight(Flight flight) {
+        outFlights.remove(flight);
     }
 
     public List<Airport> getInAirports() {
