@@ -22,7 +22,6 @@ public class Airport {
         this.outFlights = new ArrayList<>();
         this.visited = false;
         this.tag = 0;
-
     }
 
     public Location getLocation(){
