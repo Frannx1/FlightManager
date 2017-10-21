@@ -55,7 +55,6 @@ public class Flight {
         return price;
     }
 
-
     @Override
     public boolean equals(Object obj){
         if(obj == null) return  false;
