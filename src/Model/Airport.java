@@ -7,7 +7,7 @@ public class Airport {
 
     private Location location;
     private String name;
-    private List<Arc> neighbours;
+    private List<Flight> neighbours;
     private boolean visited;
     private int tag;
 
@@ -30,7 +30,7 @@ public class Airport {
         return this.name;
     }
 
-    public List<Arc> getNeighbours(){
+    public List<Flight> getNeighbours(){
         return  neighbours;
     }
 
