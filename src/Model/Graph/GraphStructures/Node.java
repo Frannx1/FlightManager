@@ -37,6 +37,10 @@ public class Node<T,V> {
         return  this.tag;
     }
 
+    public T getElement(){
+        return  this.element;
+    }
+
     public void addInArc(Arc<T,V> arc) {
         inArcs.add(arc);
     }
@@ -70,5 +74,22 @@ public class Node<T,V> {
         outArcs.removeIf(tvArc -> tvArc.getTarget().equals(node));
     }
 
+    @Override
+    public boolean equals(Object obj){
+        if(obj == null) return  false;
+        if(obj == this) return  true;
+        if(!getClass().equals(obj.getClass())) return false;
+        Node<T,V> node = (Node) obj;
+        return this.element.equals(node.getElement());
+    }
 
+    @Override
+    public int hashCode(){
+        return this.element.hashCode();
+    }
+
+    @Override
+    public String toString(){
+        return this.element.toString();
+    }
 }
