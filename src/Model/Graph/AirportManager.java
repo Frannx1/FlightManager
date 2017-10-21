@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class AirportManager {
 
-        private Set<Airport> airports;
+    private Set<Airport> airports;
     private Set<Flight> flights;
 
     public AirportManager() {
