@@ -3,29 +3,27 @@ package Model.Graph;
 import Model.Graph.GraphStructures.Airport;
 import Model.Graph.GraphStructures.Flight;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class AirportManager {
 
-    private Map<String, Airport> airports;
+        private Set<Airport> airports;
     private Set<Flight> flights;
 
     public AirportManager() {
-        airports = new HashMap<>();
+        airports = new HashSet<>();
         flights = new HashSet<>();
     }
 
     public void addAirport(Airport airport){
-        if(!airports.containsKey(airport.getName())){
-            airports.put(airport.getName(),airport);
+        if(!airports.contains(airport)){
+            airports.add(airport);
         }
     }
 
     public void deleteAirport(Airport airport) {
-        if(airports.containsKey(airport.getName())) {
+        if(airports.contains(airport)) {
             for (Airport aux: airport.getInAirports()) {
                 aux.deleteFlightsTo(airport);
             }
@@ -35,7 +33,7 @@ public class AirportManager {
             for (Flight flight: airport.getOutFlights()) {
                 flights.remove(flight);
             }
-            airports.remove(airport.getName());
+            airports.remove(airport);
         }
     }
 
@@ -45,7 +43,7 @@ public class AirportManager {
     }
 
     public void addFlight(Flight flight) throws Exception {
-        if(!airports.containsKey(flight.getOrigin()) || !airports.containsKey(flight.getTarget())) {
+        if(!airports.contains(flight.getOrigin()) || !airports.contains(flight.getTarget())) {
             throw new Exception("The Airports of the flight were invalid.");        //ver q exception
         }
         if(!flights.contains(flight)) {
@@ -64,7 +62,7 @@ public class AirportManager {
     }
 
     public void deleteFlights() {
-        for (Airport airport: airports.values()) {
+        for (Airport airport: airports) {
             airport.clearFlights();
         }
     }
