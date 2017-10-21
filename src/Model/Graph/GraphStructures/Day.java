@@ -77,7 +77,6 @@ public class Day {
 
         /*public static String getDays(List<Day> list) {
             String s = new String();
-
             Iterator<Day> it = list.iterator();
             while(it.hasNext()) {
                 switch(Day.getIndex(it.next())){
@@ -100,7 +99,6 @@ public class Day {
                     s = s.concat("-");
                 }
             }
-
             return s;
         }*/
 
