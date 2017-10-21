@@ -1,6 +1,8 @@
 package Model.Graph.GraphStructures;
 
 
+import java.util.List;
+
 public class Flight {
 
     private String airline;
