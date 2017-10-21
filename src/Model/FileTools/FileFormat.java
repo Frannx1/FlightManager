@@ -1,4 +1,4 @@
-package Model.FileSystem;
+package Model.FileTools;
 
 public enum FileFormat {
         KML, TEXT;
