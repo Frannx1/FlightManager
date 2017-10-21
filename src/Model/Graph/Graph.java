@@ -3,29 +3,30 @@ package Model.Graph;
 import Model.Graph.GraphStructures.Arc;
 import Model.Graph.GraphStructures.Node;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class Graph<T,V> {
 
-    private Set<Node<T,V>> nodes;
-    private Set<Arc<T,V>> arcs;
+    private Map<T,Node<T,V>> nodes;
+    private Map<V,Arc<T,V>> arcs;
 
     public Graph() {
-        nodes = new HashSet<>();
-        arcs = new HashSet<>();
+        nodes = new HashMap<>();
+        arcs = new HashMap<>();
     }
 
     public void addNode(T element){
-        Node<T,V> node = new Node<>(element);
-        if(!nodes.contains(node)){
-            nodes.add(node);
+        if(!nodes.containsKey(element)){
+            Node<T,V> node = new Node<>(element);
+            nodes.put(element, node);
         }
     }
 
     public void deleteNode(T element) {
-        Node<T,V> node = new Node<>(element);
-        if(nodes.contains(node)) {
+        if(nodes.containsKey(element)) {
+            Node<T,V> node = nodes.get(element);
             for (Node<T,V> aux: node.getInElements()) {
                 aux.deleteArcsTo(node);
             }
@@ -44,28 +45,28 @@ public class Graph<T,V> {
         arcs.clear();
     }
 
-    public void addFlight(Flight flight) throws Exception {
-        if(!nodes.contains(flight.getOrigin()) || !nodes.contains(flight.getTarget())) {
-            throw new Exception("The Airports of the flight were invalid.");        //ver q exception
+    public void addArc(V data, T org, T dest) throws Exception {
+        if(!nodes.containsKey(org) || !nodes.containsKey(dest)) {
+            throw new Exception("The origin or target node were invalid.");        //ver q exception
         }
-        if(!arcs.contains(flight)) {
-            flight.getOrigin().addOutFlight(flight);
-            flight.getTarget().addInFlight(flight);
-            arcs.add(flight);
-        }
-    }
-
-    public void deleteFlight(Flight flight) {
-        if(arcs.contains(flight)) {
-            flight.getTarget().removeInFlight(flight);
-            flight.getOrigin().removeOutFlight(flight);
-            arcs.remove(flight);
+        if(!arcs.containsKey(data)) {
+            Arc<T,V> arc = new Arc<>(data, nodes.get(org), nodes.get(dest));
+            arcs.put(data, arc);
         }
     }
 
-    public void deleteFlights() {
-        for (Airport airport: nodes) {
-            airport.clearFlights();
+    public void deleteArc(V data) {
+        if(arcs.containsKey(data)) {
+            Arc<T,V> arc = arcs.get(data);
+            arc.getTarget().removeInArc(arc);
+            arc.getOrigin().removeOutArc(arc);
+            arcs.remove(arc);
+        }
+    }
+
+    public void deleteArcs() {
+        for (Node<T,V> node: nodes.values()) {
+            node.clearArcs();
         }
     }
 }
