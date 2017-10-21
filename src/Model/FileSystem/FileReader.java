@@ -1,3 +1,5 @@
+package Model.FileSystem;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -5,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-/** The {@code FileReader} class represents a reader for files.
+/** The {@code Model.FileSystem.FileReader} class represents a reader for files.
  */
 public class FileReader implements Iterable<Collection<String>> {
 
@@ -13,7 +15,7 @@ public class FileReader implements Iterable<Collection<String>> {
     private String splitChar;
     private RandomAccessFile fileReader;
 
-    /** Creates a {@code FileReader} with the specified path for the data file and a specified split character.
+    /** Creates a {@code Model.FileSystem.FileReader} with the specified path for the data file and a specified split character.
      * @param path The data file's path.
      * @param splitChar The split character for splitting criteria.
      * @throws FileNotFoundException if the specified path is empty.
@@ -26,7 +28,7 @@ public class FileReader implements Iterable<Collection<String>> {
         this.splitChar = splitChar;
     }
 
-    /** Creates a {@code FileReader} with the specified path for the data file and a default split character: "#".
+    /** Creates a {@code Model.FileSystem.FileReader} with the specified path for the data file and a default split character: "#".
      * @param path The data file's path.
      * @throws FileNotFoundException if the specified path is empty.
      */
@@ -101,7 +103,7 @@ public class FileReader implements Iterable<Collection<String>> {
     }
 
     /**
-     * Returns a {@code FileReader} Custom Iterator, allows a {@code FileReader} Object to be the target of
+     * Returns a {@code Model.FileSystem.FileReader} Custom Iterator, allows a {@code Model.FileSystem.FileReader} Object to be the target of
      * the "for-each loop" statement.
      * @return an {@code Iterator<Collection<String>>}.
      */

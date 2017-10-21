@@ -1,4 +1,4 @@
-package Model;
+package Model.Graph.GraphStructures;
 
 
 public class Location {

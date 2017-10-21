@@ -1,4 +1,4 @@
-package Model;
+package Model.Graph.GraphStructures;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,11 +48,7 @@ public class Airport {
         if(obj == this) return  true;
         if (getClass() != obj.getClass()) return false;
         Airport aux = (Airport) obj;
-        if(location.equals(aux.getLocation()) && name.equals(aux.getName())){
-            if(neighbours.equals(aux.getNeighbours()) && visited == aux.getVisited())
-                return tag == aux.getTag();
-        }
-        return false;
+        return name.equals(aux.getName());
     }
 
     @Override
