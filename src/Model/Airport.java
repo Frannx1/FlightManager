@@ -46,6 +46,7 @@ public class Airport {
     public boolean equals(Object obj){
         if(obj == null) return  false;
         if(obj == this) return  true;
+        if (getClass() != obj.getClass()) return false;
         Airport aux = (Airport) obj;
         if(location.equals(aux.getLocation()) && name.equals(aux.getName())){
             if(neighbours.equals(aux.getNeighbours()) && visited == aux.getVisited())
