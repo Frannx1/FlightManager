@@ -65,6 +65,11 @@ public class Airport {
         outFlights.remove(flight);
     }
 
+    public void clearFlights() {
+        inFlights.clear();
+        outFlights.clear();
+    }
+
     public List<Airport> getInAirports() {
         List<Airport> airports = new ArrayList<>();
         for (Flight flight: inFlights) {

@@ -64,6 +64,8 @@ public class AirportManager {
     }
 
     public void deleteFlights() {
-
+        for (Airport airport: airports.values()) {
+            airport.clearFlights();
+        }
     }
 }
