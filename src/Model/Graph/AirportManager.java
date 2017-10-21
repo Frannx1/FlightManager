@@ -59,6 +59,11 @@ public class AirportManager {
         if(flights.contains(flight)) {
             flight.getTarget().removeInFlight(flight);
             flight.getOrigin().removeOutFlight(flight);
+            flights.remove(flight);
         }
+    }
+
+    public void deleteFlights() {
+
     }
 }
