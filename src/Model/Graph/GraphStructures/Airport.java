@@ -1,7 +1,6 @@
 package Model.Graph.GraphStructures;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class Airport {
@@ -78,12 +77,7 @@ public class Airport {
     }
 
     public void deleteFlightsTo(Airport airport) {
-        Iterator<Flight> flightIterator = outFlights.iterator();
-        while (flightIterator.hasNext()) {
-            if(flightIterator.next().getTarget().equals(airport)) {
-                flightIterator.remove();
-            }
-        }
+        outFlights.removeIf(flight -> flight.getTarget().equals(airport));
     }
 
     @Override
