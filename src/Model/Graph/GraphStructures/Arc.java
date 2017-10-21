@@ -39,7 +39,7 @@ public class Arc<T,V> {
         if(obj == null) return  false;
         if(obj == this) return  true;
         if(!getClass().equals(obj.getClass())) return false;
-        Arc<T,V> arc = (Arc) obj;
+        Arc arc = (Arc) obj;
         return this.data.equals(arc.getData());
     }
 
