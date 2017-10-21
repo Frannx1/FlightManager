@@ -39,6 +39,15 @@ public class Location {
     }
 
     @Override
+    public int hashCode(){
+        int hash = 1;
+        hash = hash + 31 * (int) latitude;
+        hash = hash + 23 * (int) longitude;
+        hash = hash + 29 * timeZone;
+        return  hash;
+    }
+
+    @Override
     public String toString(){
         return "(Lat:"+latitude+" Long:"+longitude+").";
     }

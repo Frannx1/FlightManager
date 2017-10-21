@@ -66,4 +66,12 @@ public class Flight {
         return this.airline.equals(aux.getAirline()) && this.flightNumber.equals(aux.getFlightNumber());
     }
 
+    @Override
+    public int hashCode(){
+        int hash = 1;
+        hash = hash + 31 *((airline == null) ? 0 : airline.hashCode());
+        hash = hash + 17 * ((flightNumber == null) ? 0 : flightNumber.hashCode());
+        return hash;
+    }
+
 }

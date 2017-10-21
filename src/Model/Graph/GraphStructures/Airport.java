@@ -83,6 +83,15 @@ public class Airport {
         return name.equals(aux.getName());
     }
 
+
+    @Override
+    public int hashCode() {
+        int hash = 1;
+        hash = hash * 17 + ((name == null) ? 0 : name.hashCode());
+        hash = hash * 31 + ((location == null) ?  0 : location.hashCode());
+        return  hash;
+    }
+
     @Override
     public String toString(){
         return  name + location.toString();
