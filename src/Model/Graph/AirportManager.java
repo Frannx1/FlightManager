@@ -19,6 +19,7 @@ public class AirportManager {
     public void addAirport(Airport airport){
         if(!airports.contains(airport)){
             airports.add(airport);
+
         }
     }
 
