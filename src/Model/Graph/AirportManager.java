@@ -20,6 +20,7 @@ public class AirportManager {
         if(!airports.contains(airport)){
             airports.add(airport);
 
+
         }
     }
 
