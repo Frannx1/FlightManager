@@ -1,7 +1,7 @@
 package Model.Graph;
 
-import Model.Graph.GraphStructures.Airport;
-import Model.Graph.GraphStructures.Flight;
+import Model.Graph.GraphStructures.trash.Airport;
+import Model.Graph.GraphStructures.trash.Flight;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,8 +19,6 @@ public class AirportManager {
     public void addAirport(Airport airport){
         if(!airports.contains(airport)){
             airports.add(airport);
-
-
         }
     }
 

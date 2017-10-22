@@ -1,4 +1,4 @@
-package Model.Graph.GraphStructures;
+package Model.Graph.GraphStructures.trash;
 
 
 import java.util.List;

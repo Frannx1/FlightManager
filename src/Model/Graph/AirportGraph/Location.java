@@ -1,4 +1,4 @@
-package Model.Graph.GraphStructures;
+package Model.Graph.AirportGraph;
 
 
 public class Location {

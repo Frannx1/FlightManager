@@ -12,8 +12,17 @@ public class Node<T,V> {
     private boolean visited;
     private int tag;
 
+    public void setVisited(boolean visited) {
+        this.visited = visited;
+    }
+
+    public void setTag(int tag) {
+        this.tag = tag;
+    }
+
     public Node(T element) {
         this.element = element;
+
         this.inArcs = new ArrayList<>();
         this.outArcs = new ArrayList<>();
         this.visited = false;
