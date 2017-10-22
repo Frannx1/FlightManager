@@ -1,6 +1,4 @@
-package Model.Graph.AirportGraph;
-
-
+package Model.Graph.AirportGraph.Structures;
 
 public class Airport {
 
@@ -22,13 +20,11 @@ public class Airport {
 
     @Override
     public boolean equals(Object obj){
-        if(obj == null || !obj.getClass().equals(this.getClass())){
-            return false;
-        }
-
+        if(obj == null) return  false;
+        if(obj == this) return  true;
+        if (getClass() != obj.getClass()) return false;
         Airport aux = (Airport) obj;
-
-        return aux.getName().equals(name) && aux.getLocation().equals(location);
+        return name.equals(aux.getName());
     }
 
     @Override

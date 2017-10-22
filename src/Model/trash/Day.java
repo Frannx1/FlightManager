@@ -1,4 +1,4 @@
-package Model.Graph.GraphStructures.trash;
+package Model.trash;
 
 
 import java.util.LinkedList;

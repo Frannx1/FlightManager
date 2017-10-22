@@ -1,6 +1,8 @@
 package Model.Graph.AirportGraph;
 
 
+import Model.Graph.AirportGraph.Structures.Airport;
+import Model.Graph.AirportGraph.Structures.Flight;
 import Model.Graph.GraphStructures.Graph;
 
 import java.util.IllegalFormatException;
@@ -8,20 +10,17 @@ import java.util.IllegalFormatException;
 
 public class AirportManager {
 
-
     private Graph<Airport, Flight> airportMap;
-
 
     public AirportManager(){
         airportMap = new Graph<Airport, Flight>();
     }
 
-
     public void addAirport(Airport a){
         airportMap.addNode(a);
     }
 
-    public void addFlight( Flight f){
+    public void addFlight(Flight f){
         try {
             airportMap.addArc(f,f.getOrigin(), f.getDestination());
         } catch (IllegalFormatException e) {

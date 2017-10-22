@@ -1,7 +1,4 @@
-package Model.Graph;
-
-import Model.Graph.GraphStructures.trash.Airport;
-import Model.Graph.GraphStructures.trash.Flight;
+package Model.trash;
 
 import java.util.HashSet;
 import java.util.Set;

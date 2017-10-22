@@ -1,6 +1,6 @@
-package Model.Graph.GraphStructures.trash;
+package Model.trash;
 
-import Model.Graph.AirportGraph.Location;
+import Model.Graph.AirportGraph.Structures.Location;
 
 import java.util.ArrayList;
 import java.util.List;

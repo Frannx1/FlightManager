@@ -1,8 +1,8 @@
 package Model.FileTools;
 
-import Model.Graph.AirportManager;
-import Model.Graph.GraphStructures.trash.Airport;
-import Model.Graph.GraphStructures.trash.Flight;
+import Model.trash.AirportManager;
+import Model.trash.Airport;
+import Model.trash.Flight;
 
 import java.io.File;
 import java.io.FileNotFoundException;

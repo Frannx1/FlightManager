@@ -1,9 +1,6 @@
 package Model.Graph.GraphStructures;
 
-
-
 import java.util.*;
-
 
 public class Graph<T,V> {
 
@@ -17,17 +14,8 @@ public class Graph<T,V> {
 
     public void addNode(T element){
         if(!nodes.containsKey(element)){
-
             Node<T,V> node = new Node<>(element);
             nodes.put(element, node);
-        }
-    }
-
-    private void clearMarks(){
-        for ( Node<T,V> n : nodes.values()){
-            n.setVisited(false);
-
-            n.setTag(0);
         }
     }
 
@@ -78,8 +66,6 @@ public class Graph<T,V> {
     }
 
 
-
-
     /**
      * This method will give you give you the path of minimum weight for the given nodes.
      * @param from the value of the node from which you want to start.
@@ -125,10 +111,18 @@ public class Graph<T,V> {
 
     }
 
+    private void clearMarks(){
+        for (Node<T,V> n : nodes.values()){
+            n.setVisited(false);
+            n.setTag(0);
+        }
+    }
 
     private class PQNode<T,V> implements Comparable<PQNode>{
+
         Node<T,V> node;
         double distance;
+
         public PQNode(Node<T,V> n, double distance){
             this.node = n;
             this.distance = distance;

@@ -12,14 +12,6 @@ public class Node<T,V> {
     private boolean visited;
     private int tag;
 
-    public void setVisited(boolean visited) {
-        this.visited = visited;
-    }
-
-    public void setTag(int tag) {
-        this.tag = tag;
-    }
-
     public Node(T element) {
         this.element = element;
 
@@ -80,6 +72,14 @@ public class Node<T,V> {
 
     public void deleteArcsTo(Node<T,V> node) {
         outArcs.removeIf(tvArc -> tvArc.getTarget().equals(node));
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
+    }
+
+    public void setTag(int tag) {
+        this.tag = tag;
     }
 
     @Override
