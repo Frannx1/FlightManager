@@ -13,7 +13,7 @@ public class AirportManager {
 
 
     public AirportManager(){
-        airportMap = new Graph<>();
+        airportMap = new Graph<Airport, Flight>();
     }
 
 

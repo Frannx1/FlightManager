@@ -61,13 +61,20 @@ public  class Flight {
     }
 
 
-
+    @Override
     public boolean equals(Object obj){
         if( obj == null || !obj.getClass().equals(this.getClass())){
             return false;
         }
-
         Flight aux = (Flight) obj;
         return aux.getAirline().equals(airline) && aux.getID() == ID;
+    }
+
+    @Override
+    public int hashCode(){
+        int hash = 1;
+        hash = hash + 29 * ((airline == null) ? 0 : airline.hashCode());
+        hash = hash + 31 * ID;
+        return hash;
     }
 }
