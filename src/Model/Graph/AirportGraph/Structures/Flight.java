@@ -1,7 +1,5 @@
 package Model.Graph.AirportGraph.Structures;
 
-import Model.trash.Day;
-
 import java.util.List;
 
 public  class Flight {

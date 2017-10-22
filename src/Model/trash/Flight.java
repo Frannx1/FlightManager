@@ -1,6 +1,8 @@
 package Model.trash;
 
 
+import Model.Graph.AirportGraph.Structures.Day;
+
 import java.util.List;
 
 public class Flight {

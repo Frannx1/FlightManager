@@ -1,4 +1,4 @@
-package Model.trash;
+package Model.Graph.AirportGraph.Structures;
 
 
 import java.util.LinkedList;
