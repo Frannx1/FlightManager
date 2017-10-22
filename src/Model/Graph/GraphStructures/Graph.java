@@ -42,7 +42,7 @@ public class Graph<T,V> {
 
     public void addArc(V data, T org, T dest) throws IllegalFormatException {
         if(!nodes.containsKey(org) || !nodes.containsKey(dest)) {
-            throw new IllegalArgumentException("The origin or target node were invalid.");        //ver q exception
+            throw new IllegalArgumentException("The origin or target node were invalid.");
         }
         if(!arcs.containsKey(data)) {
             Arc<T,V> arc = new Arc<>(data, nodes.get(org), nodes.get(dest));
@@ -81,7 +81,7 @@ public class Graph<T,V> {
         clearMarks();
 
         if(from == null || to == null){
-            throw new RuntimeException(" bad input");
+            throw new IllegalArgumentException("Bad input.");
         }
         clearMarks();
         PriorityQueue<PQNode> pq = new PriorityQueue<>();
