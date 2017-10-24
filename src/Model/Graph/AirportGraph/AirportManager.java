@@ -2,7 +2,9 @@ package Model.Graph.AirportGraph;
 
 
 import Model.Graph.AirportGraph.Structures.Airport;
+import Model.Graph.AirportGraph.Structures.Day;
 import Model.Graph.AirportGraph.Structures.Flight;
+import Model.Graph.AirportGraph.Structures.Location;
 import Model.Graph.GraphStructures.Graph;
 
 import java.util.IllegalFormatException;
@@ -12,34 +14,33 @@ public class AirportManager {
 
     private Graph<Airport, Flight> airportMap;
 
-    public AirportManager(){
+    public AirportManager() {
         airportMap = new Graph<Airport, Flight>();
     }
 
-    public void addAirport(Airport a){
-        airportMap.addNode(a);
+    public void addAirport(String airportName, double lat, double lng) {
+        airportMap.addNode(new Airport(airportName, new Location(lat, lng)));
     }
 
-    public void addFlight(Flight f){
+    public void deleteAirport(String airportName) {
+        airportMap.deleteNode(new Airport(airportName));
+    }
+
+    public void addFlight(String airline, String flightNumber, String[] days, String origin, String target,
+                          int departureTime, int flightDuration, double price) {
         try {
-            airportMap.addArc(f,f.getOrigin(), f.getDestination());
+            Flight flight = new Flight(airline, flightNumber, Day.getDays(days), departureTime, flightDuration, price);
+
+            airportMap.addArc(flight, airportMap.getNodeElement(new Airport(origin)),
+                                airportMap.getNodeElement(new Airport(target)));
+
         } catch (IllegalFormatException e) {
             e.printStackTrace();
         }
     }
 
-    public void deleteAirport(Airport a){
-        airportMap.deleteNode(a);
+    public void deleteFlight(String airline, String flightNumber) {
+        airportMap.deleteArc(new Flight(airline, flightNumber));
     }
-
-    public void deleteFlight(Flight f){
-        airportMap.deleteArc(f);
-    }
-
-    public void deleteFlight(int flightId, String airline){
-        Flight aux = new Flight(flightId, airline);
-        airportMap.deleteArc(aux);
-    }
-
 
 }

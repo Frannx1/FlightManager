@@ -6,12 +6,9 @@ public class Location {
     private double latitude;
     private double longitude;
 
-    private int timeZone;
-
-    public Location(double latitude, double longitude, int timeZone) {
+    public Location(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
-        this.timeZone = timeZone;
     }
 
     public double getLatitude() {
@@ -20,10 +17,6 @@ public class Location {
 
     public double getLongitude() {
         return longitude;
-    }
-
-    public int getTimeZone() {
-        return timeZone;
     }
 
     @Override
@@ -43,7 +36,6 @@ public class Location {
         int hash = 1;
         hash = hash + 31 * (int) latitude;
         hash = hash + 23 * (int) longitude;
-        hash = hash + 29 * timeZone;
         return  hash;
     }
 

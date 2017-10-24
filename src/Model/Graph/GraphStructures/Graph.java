@@ -65,6 +65,14 @@ public class Graph<T,V> {
         }
     }
 
+    public T getNodeElement(T element) {
+        return nodes.get(element).getElement();
+    }
+
+    public V getArcData(V data) {
+        return arcs.get(data).getData();
+    }
+
 
     /**
      * This method will give you give you the path of minimum weight for the given nodes.
