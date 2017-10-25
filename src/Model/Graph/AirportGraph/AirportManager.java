@@ -7,12 +7,34 @@ import Model.Graph.AirportGraph.Structures.Flight;
 import Model.Graph.AirportGraph.Structures.Location;
 import Model.Graph.GraphStructures.Graph;
 
+import java.util.Comparator;
 import java.util.IllegalFormatException;
 
 
 public class AirportManager {
 
     private Graph<Airport, Flight> airportMap;
+
+    private Comparator<Flight> cmpFlightDuration = new Comparator<Flight>() {
+        @Override
+        public int compare(Flight o1, Flight o2) {
+            return o1.getFlightDuration() - o2.getFlightDuration();
+        }
+    };
+
+    private Comparator<Flight> cmpDepartureTime = new Comparator<Flight>() {
+        @Override
+        public int compare(Flight o1, Flight o2) {
+            return o1.getCurrentDayIndex()*(dayMins)+o1.getDepartureTime()+o1.getFlightTime())%(weekMins)).compareTo((o2.getCurrentDayIndex()*(dayMins)+o2.getFlightTime()+o2.getDepartureTime())%(weekMins));;
+        }
+    };
+
+    private Comparator<Flight> cmpPrecio = new Comparator<Flight>() {
+        @Override
+        public int compare(Flight o1, Flight o2) {
+            return (int) (o1.getPrice() - o2.getPrice());
+        }
+    };
 
     public AirportManager() {
         airportMap = new Graph<Airport, Flight>();

@@ -12,6 +12,7 @@ public class Graph<T,V> {
         nodes = new HashMap<>();
         arcs = new HashMap<>();
         this.comparators = new ArrayList<>();
+
         for (Comparator<V> cmp: comparators) {
             this.comparators.add(new Comparator<Arc<T,V>>() {
                 @Override

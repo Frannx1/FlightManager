@@ -3,7 +3,6 @@ import Model.FileTools.FileFormat;
 import Model.FileTools.FileManager;
 import Model.Graph.AirportGraph.AirportManager;
 import Model.Graph.AirportGraph.FlightPriority;
-import Model.Graph.AirportGraph.Structures.Airport;
 import Model.Graph.AirportGraph.Structures.Day;
 
 import java.io.IOException;
@@ -11,12 +10,12 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class Parser {
-    private  FileFormat fileFormat;
+    private FileFormat fileFormat;
     private String output;
     private AirportManager airportManager;
-    private  String airportFile;
-    private  String flightFile;
-    private  FileManager fileManager;
+    private String airportFile;
+    private String flightFile;
+    private FileManager fileManager;
 
    public Parser(AirportManager manager, String airportFile, String flightFile, FileManager fileManager)    {
        if(manager == null || airportFile == null || flightFile == null) throw  new IllegalArgumentException();

@@ -14,14 +14,6 @@ public class Arc<T,V> {
         target.addInArc(this);
     }
 
-    public Arc(V data, T origin, T target) {
-        this.origin = new Node<>(origin);
-        this.target = new Node<>(target);
-        this.data = data;
-        this.origin.addOutArc(this);
-        this.target.addInArc(this);
-    }
-
     public Node<T,V> getOrigin() {
         return origin;
     }
