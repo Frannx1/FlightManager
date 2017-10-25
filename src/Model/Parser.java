@@ -95,6 +95,7 @@ public class Parser {
             String[] days = res[4].split("-");
             if(!Day.checkDays(days)){
                 System.out.println("Repeated days.");
+                return false;
             }
             airportManager.addFlight(res[2], res[3], days, res[5], res[6],
                     new Integer(res[7]), new Integer(res[8]), new Double(res[9]));
@@ -102,7 +103,11 @@ public class Parser {
         }
 
         else if(Pattern.matches(delFlightExpReg, command)){
-            airportManager.deleteFlight(command);
+            String[] args = command.split("-");
+            if(args.length > 2){
+                 System.out.println("Wrong parameters.");
+            }    return false;
+            airportManager.deleteFlight(args[0], args[1]);
             return false;
         }
 
@@ -113,7 +118,7 @@ public class Parser {
         }
 
         else if(Pattern.matches(delAllFlightExpReg, command)){
-            fileManager.deleteFlights();
+            airportManager.deleteFlights();
             return false;
         }
 
@@ -210,11 +215,11 @@ public class Parser {
         if(args.length == 1) {
             if(args[0].equals("--delete-airports")) {
                 fileManager.load(airportFile, flightFile);
-                fileManager.deleteAirports();
+                airportManager.deleteAirports();
             }
             else if(args[0].equals("--delete-flights")) {
                 fileManager.load(airportFile, flightFile);
-                fileManager.deleteFlights();
+                airportManager.deleteFlights();
             }
             else {
                 return false;
@@ -230,7 +235,7 @@ public class Parser {
                 }
                 else if(args[2].equals("--replace-airports")) {
                     fileManager.load(airportFile, flightFile);
-                    fileManager.deleteAirports();
+                    airportManager.deleteAirports();
                     fileManager.readAirports(args[1]);
                 }
                 else {
