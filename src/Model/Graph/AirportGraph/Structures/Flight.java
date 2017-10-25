@@ -64,6 +64,7 @@ public  class Flight {
     public boolean equals(Object obj){
         if(obj == null) return  false;
         if(obj == this) return  true;
+
         if(!getClass().equals(obj.getClass())) {
             return false;
         }
