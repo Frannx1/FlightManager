@@ -47,6 +47,15 @@ public  class Flight {
         return price;
     }
 
+    public boolean departureOnDate(List<Day> days){
+        for(Day d : days){
+            if(this.days.contains(d)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * This method gives you the time offset from the start of the week (Mon 00:00)
      * @return long offset from the start of the week.

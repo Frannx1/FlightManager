@@ -1,12 +1,14 @@
 package Model.Graph.GraphStructures;
 
+import Model.Graph.AirportGraph.Structures.Day;
+
 import java.util.*;
 
 public class Graph<T,V> {
 
-    private Map<T,Node<T,V>> nodes;
-    private Map<V,Arc<T,V>> arcs;
-    private List<Comparator<Arc<T,V>>> comparators;
+    protected Map<T,Node<T,V>> nodes;
+    protected Map<V,Arc<T,V>> arcs;
+    protected List<Comparator<Arc<T,V>>> comparators;
 
     public Graph(List<Comparator<V>> comparators) {
         nodes = new HashMap<>();
@@ -133,53 +135,21 @@ public class Graph<T,V> {
 
     }
 
-    public List<Arc<T,V>> minTotalTimePath(T from, T to, ArcInterface<Arc<T,V>> arcInt,Comparator<Arc<T,V>> cmp ){
-        if(from == null || to == null){
-            throw new IllegalArgumentException("Bad input.");
-        }
-        clearMarks();
-        PriorityQueue<PQNode> pq = new PriorityQueue<>();
-
-        pq.offer(new PQNode(nodes.get(from), 0, null));
-
-        List<Arc<T,V>> path = new ArrayList<>();
-
-        while(!pq.isEmpty()){
-
-            PQNode<T,V> aux = pq.poll();
-            if(aux.node.getElement() == to){
-
-                return path;
-            }
-            if(!aux.node.getVisited()){
-                aux.node.setVisited(true);
-                path.add(aux.usedArc);
-                for(Node n : aux.node.getAdjacents()){
-                    Arc<T,V> r = (Arc<T, V>) aux.node.getTree(n, cmp).first();
-                    if(!r.getTarget().getVisited())
-                        pq.offer(new PQNode(r.getTarget(),(arcInt.convert(r)-aux.distance) + aux.distance, r));
-                }
-            }
-        }
 
 
-        return  path;
-
-    }
-
-    private void clearMarks(){
+    protected void clearMarks(){
         for (Node<T,V> n : nodes.values()){
             n.setVisited(false);
             n.setTag(0);
         }
     }
 
-    private class PQNode<T,V> implements Comparable<PQNode>{
+    protected class PQNode<T,V> implements Comparable<PQNode>{
 
-        Node<T,V> node;
-        double distance;
-
-        Arc<T,V> usedArc;
+        public Node<T,V> node;
+        public double distance;
+        public Arc<T,V> usedArc;
+        
         public PQNode(Node<T,V> n, double distance, Arc<T,V> arc){
             this.node = n;
             this.distance = distance;
