@@ -1,5 +1,6 @@
 package Model.Graph.AirportGraph.Structures;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public  class Flight {
@@ -44,6 +45,19 @@ public  class Flight {
 
     public Double getPrice() {
         return price;
+    }
+
+    /**
+     * This method gives you the time offset from the start of the week (Mon 00:00)
+     * @return long offset from the start of the week.
+     */
+    public List<Long> getWeekTime(){
+    List<Long> times = new ArrayList<>();
+
+    for(Day d : days){
+        times.add(Day.getIndex(d) * Day.DAY_MIN);
+    }
+    return times;
     }
 
     @Override

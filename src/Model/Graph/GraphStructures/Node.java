@@ -93,6 +93,9 @@ public class Node<T,V> {
         }
         return elements;
     }
+    public Set<Node<T,V>> getAdjacents(){
+        return outArcs.keySet();
+    }
 
     public void deleteArcsTo(Node<T,V> node) {
         outArcs.remove(node);

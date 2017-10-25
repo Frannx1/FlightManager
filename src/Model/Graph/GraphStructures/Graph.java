@@ -83,6 +83,9 @@ public class Graph<T,V> {
         return arcs.get(data).getData();
     }
 
+    public Comparator<Arc<T,V>> getComparator(int index){
+        return comparators.get(index);
+    }
 
     /**
      * This method will give you give you the path of minimum weight for the given nodes.
@@ -95,35 +98,69 @@ public class Graph<T,V> {
     // pedimos una interface y no agregamos el metodo en arc porque vamos a querer el camino con respescto a
     // tres distintos aspectos, asi que no puedo tener en cuenta eso es un arc normal.
 
-    public List<Node<T,V>> minPath(T from, T to, ArcInterface<Arc<T,V>> arcInt){
-        clearMarks();
-
+    public List<Arc<T,V>> minPath(T from, T to, ArcInterface<Arc<T,V>> arcInt, Comparator<Arc<T,V>> cmp){
         if(from == null || to == null){
             throw new IllegalArgumentException("Bad input.");
         }
         clearMarks();
         PriorityQueue<PQNode> pq = new PriorityQueue<>();
 
-        pq.offer(new PQNode(nodes.get(from), 0));
+        pq.offer(new PQNode(nodes.get(from), 0, null));
 
-        List<Node<T,V>> path = new ArrayList<>();
+        List<Arc<T,V>> path = new ArrayList<>();
 
         while(!pq.isEmpty()){
+
             PQNode<T,V> aux = pq.poll();
             if(aux.node.getElement() == to){
-                path.add(nodes.get(to));
+
                return path;
             }
             if(!aux.node.getVisited()){
                 aux.node.setVisited(true);
-                path.add(aux.node);// porque siempre el que saco de la PQ es el mejor
-                for(Arc r : aux.node.getOutArcs()){
-                    // el if es una mejora
+                path.add(aux.usedArc);
+                for(Node n : aux.node.getAdjacents()){
+                    Arc<T,V> r = (Arc) aux.node.getTree(n,cmp).first();
                     if(!r.getTarget().getVisited())
-                        pq.offer(new PQNode(r.getTarget(),arcInt.convert(r) + aux.distance));
+                        pq.offer(new PQNode(r.getTarget(),arcInt.convert(r) + aux.distance, r));
                 }
             }
         }
+
+
+        return  path;
+
+    }
+
+    public List<Arc<T,V>> minTotalTimePath(T from, T to, ArcInterface<Arc<T,V>> arcInt,Comparator<Arc<T,V>> cmp ){
+        if(from == null || to == null){
+            throw new IllegalArgumentException("Bad input.");
+        }
+        clearMarks();
+        PriorityQueue<PQNode> pq = new PriorityQueue<>();
+
+        pq.offer(new PQNode(nodes.get(from), 0, null));
+
+        List<Arc<T,V>> path = new ArrayList<>();
+
+        while(!pq.isEmpty()){
+
+            PQNode<T,V> aux = pq.poll();
+            if(aux.node.getElement() == to){
+
+                return path;
+            }
+            if(!aux.node.getVisited()){
+                aux.node.setVisited(true);
+                path.add(aux.usedArc);
+                for(Node n : aux.node.getAdjacents()){
+                    Arc<T,V> r = (Arc<T, V>) aux.node.getTree(n, cmp).first();
+                    if(!r.getTarget().getVisited())
+                        pq.offer(new PQNode(r.getTarget(),(arcInt.convert(r)-aux.distance) + aux.distance, r));
+                }
+            }
+        }
+
 
         return  path;
 
@@ -141,9 +178,11 @@ public class Graph<T,V> {
         Node<T,V> node;
         double distance;
 
-        public PQNode(Node<T,V> n, double distance){
+        Arc<T,V> usedArc;
+        public PQNode(Node<T,V> n, double distance, Arc<T,V> arc){
             this.node = n;
             this.distance = distance;
+            usedArc = arc;
         }
 
         public int compareTo(PQNode other){

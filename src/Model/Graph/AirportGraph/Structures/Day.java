@@ -16,6 +16,8 @@ public class Day {
     private static final Day SUNDAY = new Day(6);
 
     private final int index;
+    public static final long DAY_MIN = 60*24;
+
 
     private static final Day days[] = {MONDAY,TUESDAY,WEDNESDAY,THURSDAY,FRIDAY,SATURDAY,SUNDAY};
 
