@@ -26,6 +26,10 @@ public class AirportManager {
         airportMap.deleteNode(new Airport(airportName));
     }
 
+    public void deleteAirports() {
+        airportMap.deleteGraph();
+    }
+
     public void addFlight(String airline, String flightNumber, String[] days, String origin, String target,
                           int departureTime, int flightDuration, double price) {
         try {
@@ -41,6 +45,10 @@ public class AirportManager {
 
     public void deleteFlight(String airline, String flightNumber) {
         airportMap.deleteArc(new Flight(airline, flightNumber));
+    }
+
+    public void deleteFlights() {
+        airportMap.deleteArcs();
     }
 
 }
