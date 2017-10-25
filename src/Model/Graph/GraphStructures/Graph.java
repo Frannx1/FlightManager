@@ -6,15 +6,25 @@ public class Graph<T,V> {
 
     private Map<T,Node<T,V>> nodes;
     private Map<V,Arc<T,V>> arcs;
+    private List<Comparator<Arc<T,V>>> comparators;
 
-    public Graph() {
+    public Graph(List<Comparator<V>> comparators) {
         nodes = new HashMap<>();
         arcs = new HashMap<>();
+        this.comparators = new ArrayList<>();
+        for (Comparator<V> cmp: comparators) {
+            this.comparators.add(new Comparator<Arc<T,V>>() {
+                @Override
+                public int compare(Arc<T,V> o1, Arc<T,V> o2) {
+                    return cmp.compare(o1.getData(), o2.getData());
+                }
+            });
+        }
     }
 
     public void addNode(T element){
         if(!nodes.containsKey(element)){
-            Node<T,V> node = new Node<>(element);
+            Node<T,V> node = new Node<>(element, comparators);
             nodes.put(element, node);
         }
     }
@@ -85,7 +95,7 @@ public class Graph<T,V> {
     // pedimos una interface y no agregamos el metodo en arc porque vamos a querer el camino con respescto a
     // tres distintos aspectos, asi que no puedo tener en cuenta eso es un arc normal.
 
-    public List<Node<T,V>> minPath(T from, T to, ArcInterface<Arc<T,V>> arcInt ){
+    public List<Node<T,V>> minPath(T from, T to, ArcInterface<Arc<T,V>> arcInt){
         clearMarks();
 
         if(from == null || to == null){
@@ -110,7 +120,7 @@ public class Graph<T,V> {
                 for(Arc r : aux.node.getOutArcs()){
                     // el if es una mejora
                     if(!r.getTarget().getVisited())
-                        pq.offer(new PQNode(r.getTarget(),arcInt.convert(r) + aux.distance ));
+                        pq.offer(new PQNode(r.getTarget(),arcInt.convert(r) + aux.distance));
                 }
             }
         }
