@@ -15,7 +15,7 @@ public class Day {
 
     private final int index;
     public static final int DAY_MIN = 60*24;
-    private static final int DAY_WEEK = DAY_MIN * 7;
+    private static final int WEEK_MIN = DAY_MIN * 7;
 
 
     private static final Day days[] = {MONDAY,TUESDAY,WEDNESDAY,THURSDAY,FRIDAY,SATURDAY,SUNDAY};
@@ -114,18 +114,16 @@ public class Day {
         for (Day day: days) {
             list.add(Day.getIndex(day) * Day.DAY_MIN + departureTime);
         }
-        list.add(currentTime % (DAY_WEEK));
+        list.add(currentTime % (WEEK_MIN));
         Collections.sort(list);
         int index = list.indexOf(currentTime);
         if(index == 0) {
             return list.get(1) - list.get(index);
         }
-        if(index == list.size()) {
-            return list.get(list.size()-1) - list.get(index);
+        if(index == list.size()-1) {
+            return list.get(index) - list.get(0) + WEEK_MIN;
         }
-        int difference1 = list.get(index+1) - list.get(index);
-        int difference2 = list.get(index) - list.get(index-1);
-        return (difference2 < difference1)? difference2 : difference1;
+        return list.get(index+1) - list.get(index);
     }
 }
 

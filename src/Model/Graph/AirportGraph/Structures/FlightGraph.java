@@ -28,7 +28,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
         }
 
         clearMarks();
-        PriorityQueue<Graph.PQNode> pq = new PriorityQueue<>();
+        PriorityQueue<PQNode> pq = new PriorityQueue<>();
         List<Arc<Airport,Flight>> path = new ArrayList<>();
 
         Node<Airport, Flight> origin = nodes.get(from);
@@ -81,7 +81,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
         }
 
         clearMarks();
-        PriorityQueue<Graph.PQNode> pq = new PriorityQueue<>();
+        PriorityQueue<PQNode> pq = new PriorityQueue<>();
         List<Arc<Airport,Flight>> path = new ArrayList<>();
 
 
@@ -103,9 +103,14 @@ public class FlightGraph extends Graph<Airport, Flight> {
                 }
             }
         }
-
         return  path;
+    }
 
+    private class PQNodeTimeVariable extends PQNode<Airport,Flight> {
+
+        public PQNodeTimeVariable(Node<Airport, Flight> n, double distance, Arc<Airport, Flight> arc) {
+            super(n, distance, arc);
+        }
     }
 
 }
