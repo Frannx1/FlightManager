@@ -1,7 +1,5 @@
 package Model.Graph.GraphStructures;
 
-import Model.Graph.AirportGraph.Structures.Day;
-
 import java.util.*;
 
 public class Graph<T,V> {
@@ -129,13 +127,8 @@ public class Graph<T,V> {
                 }
             }
         }
-
-
         return  path;
-
     }
-
-
 
     protected void clearMarks(){
         for (Node<T,V> n : nodes.values()){

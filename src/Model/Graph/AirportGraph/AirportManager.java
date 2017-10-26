@@ -1,14 +1,13 @@
 package Model.Graph.AirportGraph;
 
 
-import Model.Graph.AirportGraph.Structures.Airport;
-import Model.Graph.AirportGraph.Structures.Day;
-import Model.Graph.AirportGraph.Structures.Flight;
-import Model.Graph.AirportGraph.Structures.Location;
+import Model.Graph.AirportGraph.Structures.*;
 import Model.Graph.GraphStructures.Graph;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.IllegalFormatException;
+import java.util.List;
 
 
 public class AirportManager {
@@ -22,13 +21,6 @@ public class AirportManager {
         }
     };
 
-    private Comparator<Flight> cmpDepartureTime = new Comparator<Flight>() {
-        @Override
-        public int compare(Flight o1, Flight o2) {
-            return o1.getCurrentDayIndex()*(dayMins)+o1.getDepartureTime()+o1.getFlightTime())%(weekMins)).compareTo((o2.getCurrentDayIndex()*(dayMins)+o2.getFlightTime()+o2.getDepartureTime())%(weekMins));;
-        }
-    };
-
     private Comparator<Flight> cmpPrecio = new Comparator<Flight>() {
         @Override
         public int compare(Flight o1, Flight o2) {
@@ -37,7 +29,10 @@ public class AirportManager {
     };
 
     public AirportManager() {
-        airportMap = new Graph<Airport, Flight>();
+        List<Comparator<Flight>> comparators = new ArrayList<>();
+        comparators.add(cmpFlightDuration);
+        comparators.add(cmpPrecio);
+        airportMap = new FlightGraph(comparators);
     }
 
     public void addAirport(String airportName, double lat, double lng) {
