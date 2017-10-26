@@ -149,7 +149,7 @@ public class Graph<T,V> {
         public Node<T,V> node;
         public double distance;
         public Arc<T,V> usedArc;
-        
+
         public PQNode(Node<T,V> n, double distance, Arc<T,V> arc){
             this.node = n;
             this.distance = distance;
@@ -157,7 +157,7 @@ public class Graph<T,V> {
         }
 
         public int compareTo(PQNode other){
-            return Double.valueOf(distance).compareTo(other.distance);
+            return (int) (distance - other.distance);
         }
     }
 }

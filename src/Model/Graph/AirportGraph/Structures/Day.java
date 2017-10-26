@@ -1,9 +1,7 @@
 package Model.Graph.AirportGraph.Structures;
 
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Day {
 
@@ -110,5 +108,23 @@ public class Day {
             return String.valueOf(this.index);
         }
 
+    public static int closestTimeWithOffset(int currentTime, List<Day> days, Integer departureTime) {
+        List<Integer> list = new ArrayList<>();
+        for (Day day: days) {
+            list.add((int) (Day.getIndex(day) * Day.DAY_MIN) + departureTime);
+        }
+        list.add(currentTime);
+        Collections.sort(list);
+        int index = list.indexOf(currentTime);
+        if(index == 0) {
+            return list.get(1) - currentTime;
+        }
+        if(index == list.size()) {
+            return list.get(list.size()-1) - currentTime;
+        }
+        int diference1 = list.get(index+1) - currentTime;
+        int diference2 = currentTime - list.get(index-1);
+        return (diference2 < diference1)? diference2 : diference1;
+    }
 }
 

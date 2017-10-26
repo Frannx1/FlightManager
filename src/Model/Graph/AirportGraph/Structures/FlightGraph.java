@@ -8,9 +8,6 @@ import Model.Graph.GraphStructures.Node;
 import java.awt.datatransfer.FlavorListener;
 import java.util.*;
 
-/**
- * Created by SB on 25/10/2017.
- */
 public class FlightGraph extends Graph<Airport, Flight> {
 
     public FlightGraph(List<Comparator<Flight>> comparators) {

@@ -1,6 +1,8 @@
 package Model.Graph.AirportGraph.Structures;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public  class Flight {
@@ -61,12 +63,16 @@ public  class Flight {
      * @return long offset from the start of the week.
      */
     public List<Long> getWeekTime(){
-    List<Long> times = new ArrayList<>();
+        List<Long> times = new ArrayList<>();
 
-    for(Day d : days){
-        times.add(Day.getIndex(d) * Day.DAY_MIN);
+        for(Day d : days){
+            times.add(Day.getIndex(d) * Day.DAY_MIN);
+        }
+        return times;
     }
-    return times;
+
+    public int timeToNext(int currentTime) {
+        return Day.closestTimeWithOffset(currentTime, days, departureTime);
     }
 
     @Override
