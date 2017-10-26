@@ -14,7 +14,8 @@ public class Day {
     private static final Day SUNDAY = new Day(6);
 
     private final int index;
-    public static final long DAY_MIN = 60*24;
+    public static final int DAY_MIN = 60*24;
+    private static final int DAY_WEEK = DAY_MIN * 7;
 
 
     private static final Day days[] = {MONDAY,TUESDAY,WEDNESDAY,THURSDAY,FRIDAY,SATURDAY,SUNDAY};
@@ -111,20 +112,20 @@ public class Day {
     public static int closestTimeWithOffset(int currentTime, List<Day> days, Integer departureTime) {
         List<Integer> list = new ArrayList<>();
         for (Day day: days) {
-            list.add((int) (Day.getIndex(day) * Day.DAY_MIN) + departureTime);
+            list.add(Day.getIndex(day) * Day.DAY_MIN + departureTime);
         }
-        list.add(currentTime);
+        list.add(currentTime % (DAY_WEEK));
         Collections.sort(list);
         int index = list.indexOf(currentTime);
         if(index == 0) {
-            return list.get(1) - currentTime;
+            return list.get(1) - list.get(index);
         }
         if(index == list.size()) {
-            return list.get(list.size()-1) - currentTime;
+            return list.get(list.size()-1) - list.get(index);
         }
-        int diference1 = list.get(index+1) - currentTime;
-        int diference2 = currentTime - list.get(index-1);
-        return (diference2 < diference1)? diference2 : diference1;
+        int difference1 = list.get(index+1) - list.get(index);
+        int difference2 = list.get(index) - list.get(index-1);
+        return (difference2 < difference1)? difference2 : difference1;
     }
 }
 
