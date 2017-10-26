@@ -84,6 +84,16 @@ public class FlightGraph extends Graph<Airport, Flight> {
         PriorityQueue<PQNode> pq = new PriorityQueue<>();
         List<Arc<Airport,Flight>> path = new ArrayList<>();
 
+        Node<Airport, Flight> origin = nodes.get(from);
+        origin.setVisited(true);
+
+        for(Node<Airport, Flight> n : origin.getAdjacents()){
+            Arc<Airport,Flight> r = origin.getTree(n, cmp).first();
+            if (r.getData().departureOnDate(days)) {
+                pq.offer(new PQNode(n, r.getData().getFlightDuration(), r));
+                r.getData().setTagCurrentTime(r.getData().getFlightDuration());
+            }
+        }
 
 
         while(!pq.isEmpty()){
@@ -93,13 +103,20 @@ public class FlightGraph extends Graph<Airport, Flight> {
 
                 return path;
             }
-            if(!aux.node.getVisited()){
+            if(!aux.node.getVisited()) {
                 aux.node.setVisited(true);
                 path.add(aux.usedArc);
-                for(Node<Airport, Flight> n : (Set<Node<Airport, Flight>>) aux.node.getAdjacents()){
-                    Arc<Airport,Flight> r = (Arc<Airport, Flight>) aux.node.getTree(n, cmp).first();
-                    if(!r.getTarget().getVisited())
-                        pq.offer(new Graph.PQNode(r.getTarget(),(arcInt.convert(r)-aux.distance) + aux.distance, r));
+                for (Node<Airport, Flight> n : aux.node.getAdjacents()) {
+                    Arc<Airport,Flight> bestFlightToNode = aux.node.getTree(n, cmp).first();
+                    int bestTime = Day.closestTimeWithOffset((aux.distance, bestFlightToNode.getData().getWeekTime(),bestFlightToNode.getData().getDepartureTime() )
+                    for (Arc<Airport, Flight> r : aux.node.getTree(n, cmp)) {
+                        //Arc<Airport,Flight> r =  aux.node.getTree(n, cmp).first();
+
+                        if (!r.getTarget().getVisited())
+                            pq.offer(new Graph.PQNode(r.getTarget(), aux.distance + , r));
+
+                    }
+
                 }
             }
         }

@@ -13,6 +13,7 @@ public  class Flight {
     private Integer departureTime;
     private Integer flightDuration;
     private Double price;
+    private int tagCurrentTime;
 
     public Flight(String airline, String flightNumber, List<Day> days, int departureTime,
                   int flightDuration, double price){
@@ -22,6 +23,7 @@ public  class Flight {
         this.departureTime = departureTime;
         this.flightDuration = flightDuration;
         this.price = price;
+        this.tagCurrentTime = 0;
     }
 
     public Flight(String airline, String flightNumber){
@@ -49,6 +51,10 @@ public  class Flight {
         return price;
     }
 
+    public void setTagCurrentTime(int currentTime) {
+        this.tagCurrentTime = currentTime;
+    }
+
     public boolean departureOnDate(List<Day> days){
         for(Day d : days){
             if(this.days.contains(d)){
@@ -71,8 +77,8 @@ public  class Flight {
         return times;
     }
 
-    public int timeToNext(int currentTime) {
-        return Day.closestTimeWithOffset(currentTime, days, departureTime);
+    public int timeToNext() {
+        return Day.closestTimeWithOffset(tagCurrentTime, days, departureTime);
     }
 
     @Override
