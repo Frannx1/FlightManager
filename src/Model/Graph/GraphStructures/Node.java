@@ -6,7 +6,8 @@ import java.util.*;
 public class Node<T,V> {
 
     private T element;
-    private Map<Node<T,V>, List<TreeSet<Arc<T,V>>>> outArcs;
+    private Map<Node<T,V>, List<TreeSet<Arc<T,V>>>> outArcsMap;
+    private List<Arc<T,V>> outArcsList;
     private List<Arc<T,V>> inArcs;
     private List<Comparator<Arc<T,V>>> comparators;
     private boolean visited;
@@ -15,7 +16,8 @@ public class Node<T,V> {
     public Node(T element, List<Comparator<Arc<T,V>>> comparators) {
         this.element = element;
         this.inArcs = new ArrayList<>();
-        this.outArcs = new HashMap<>();
+        this.outArcsList = new ArrayList<>();
+        this.outArcsMap = new HashMap<>();
         this.comparators = comparators;
         this.visited = false;
         this.tag = 0;
@@ -26,11 +28,7 @@ public class Node<T,V> {
     }
 
     public List<Arc<T, V>> getOutArcs(){
-        List<Arc<T,V>> list = new ArrayList<>();
-        for (List<TreeSet<Arc<T, V>>> nodeList: outArcs.values()) {
-            list.addAll(nodeList.get(0));
-        }
-        return list;
+        return outArcsList;
     }
 
     public boolean getVisited(){
@@ -54,23 +52,25 @@ public class Node<T,V> {
     }
 
     public void addOutArc(Arc<T,V> arc) {
-        if(!outArcs.containsKey(arc.getTarget())) {
+        outArcsList.add(arc);
+        if(!outArcsMap.containsKey(arc.getTarget())) {
             List<TreeSet<Arc<T,V>>> list = new ArrayList<>();
-            outArcs.put(arc.getTarget(), list);
+            outArcsMap.put(arc.getTarget(), list);
 
             for (Comparator<Arc<T,V>> cmp: comparators) {
                 list.add(new TreeSet<Arc<T, V>>(cmp));
             }
         }
-        List<TreeSet<Arc<T,V>>> nodeArcs = outArcs.get(arc.getTarget());
+        List<TreeSet<Arc<T,V>>> nodeArcs = outArcsMap.get(arc.getTarget());
         for (TreeSet<Arc<T,V>> set: nodeArcs) {
             set.add(arc);
         }
     }
 
     public void removeOutArc(Arc<T,V> arc) {
-        if(outArcs.containsKey(arc.getTarget())) {
-            List<TreeSet<Arc<T,V>>> nodeArcs = outArcs.get(arc.getTarget());
+        outArcsList.remove(arc);
+        if(outArcsMap.containsKey(arc.getTarget())) {
+            List<TreeSet<Arc<T,V>>> nodeArcs = outArcsMap.get(arc.getTarget());
             for (TreeSet<Arc<T,V>> set: nodeArcs) {
                 set.remove(arc);
             }
@@ -78,12 +78,12 @@ public class Node<T,V> {
     }
 
     public TreeSet<Arc<T,V>> getTree(Node<T,V> node, Comparator<Arc<T,V>> cmp) {
-        return outArcs.get(node).get(comparators.indexOf(cmp));
+        return outArcsMap.get(node).get(comparators.indexOf(cmp));
     }
 
     public void clearArcs() {
         inArcs.clear();
-        outArcs.clear();
+        outArcsMap.clear();
     }
 
     public List<Node<T,V>> getInElements() {
@@ -94,11 +94,12 @@ public class Node<T,V> {
         return elements;
     }
     public Set<Node<T,V>> getAdjacents(){
-        return outArcs.keySet();
+        return outArcsMap.keySet();
     }
 
     public void deleteArcsTo(Node<T,V> node) {
-        outArcs.remove(node);
+        outArcsList.removeIf(tvArc -> tvArc.getTarget().equals(node));
+        outArcsMap.remove(node);
     }
 
     public void setVisited(boolean visited) {
