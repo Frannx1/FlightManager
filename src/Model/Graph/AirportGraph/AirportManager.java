@@ -78,18 +78,35 @@ public class AirportManager {
         a.addAirport("URU", 3,0);
         a.addAirport("PAR", 4,0);
 
+
+
         String[] days = new String[1];
         days[0] = "Lu";
 
 
-        a.addFlight("san", "1",days,"ARG","BRA",7,2,400 );
+        a.addFlight("san", "1",days,"ARG","BRA",7*60,2*60,400 );
 
-        a.addFlight("san", "2",days,"ARG","URU",9,2,900 );
+        a.addFlight("san", "2",days,"ARG","URU",9*60,2*60,900 );
 
-        a.addFlight("san", "3",days,"BRA","URU",14,1,100 );
+        a.addFlight("san", "3",days,"BRA","URU",14*60,1*60,100 );
+
+        a.addFlight("san", "4",days,"BRA","URU",14*60,1*60,100 );
+
+        a.addFlight("san", "5",days,"ARG","CHI",20*60,13*60,1500 );
+
+        a.addFlight("san", "6",days,"ARG","PAR",10*60,1*60,700 );
+
+        a.addFlight("san", "7",days,"PAR","CHI",13*60,2*60,300 );
+
+        a.addFlight("san", "8",days,"CHI","ARG",10*60,2*60,1000 );
+
+        a.addFlight("san", "9",days,"CHI","PAR",9*60,1*60,500 );
+
+        a.addFlight("san", "10",days,"BRA","URU",14*60,1*60,100 );
+
 
         Airport from = new Airport("ARG",new Location(0,0));
-        Airport to = new Airport("URU",new Location(3,0));
+        Airport to = new Airport("CHI",new Location(3,0));
         ArcInterface<Arc<Airport,Flight>> arcint = new ArcInterface<Arc<Airport,Flight>>(){
             public double convert(Arc<Airport,Flight> arc ){
                 return (double)arc.getData().getFlightDuration();
@@ -99,12 +116,15 @@ public class AirportManager {
         List<Day> ldays = new ArrayList<>();
         ldays.add(Day.getDay(0));
 
-        List<Arc<Airport,Flight>> route = a.airportMap.minPath(from, to , arcint,a.cmpPrecio, ldays);
+        List<Arc<Airport,Flight>> route = a.airportMap.minTotalTimePath(from, to , arcint,a.cmpFlightDuration, ldays);
 
         for(Arc<Airport,Flight> r : route){
-            System.out.println(r.getTarget());
+            System.out.println("Origin: "+ r.getOrigin() + " dest: "+ r.getTarget());
         }
+
+
         System.out.println("done");
+
     }
 
 }

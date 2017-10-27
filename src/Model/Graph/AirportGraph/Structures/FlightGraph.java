@@ -14,9 +14,9 @@ public class FlightGraph extends Graph<Airport, Flight> {
     }
 
 
-
     public List<Arc<Airport,Flight>> minPath(Airport from, Airport to, ArcInterface<Arc<Airport,Flight>> arcInt,
-                                                      Comparator<Arc<Airport,Flight>> cmp, List<Day> days ){
+                                             Comparator<Arc<Airport,Flight>> cmp, List<Day> days ){
+
 
         if(from == null || to == null){
             throw new IllegalArgumentException("Bad input.");
@@ -28,7 +28,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
 
         clearMarks();
         PriorityQueue<PQNode> pq = new PriorityQueue<>();
-        List<Arc<Airport,Flight>> path = new ArrayList<>();
+
 
         Node<Airport, Flight> origin = nodes.get(from);
         origin.setVisited(true);
@@ -36,7 +36,9 @@ public class FlightGraph extends Graph<Airport, Flight> {
         for(Node<Airport, Flight> n : origin.getAdjacents()){
             Arc<Airport,Flight> r = origin.getTree(n, cmp).first();
             if(r.getData().departureOnDate(days)) {
-                pq.offer(new PQNode(n, r.getData().getFlightDuration(), r));
+                List<Arc<Airport,Flight>> path = new ArrayList<>();
+                path.add(r);
+                pq.offer(new PQNode(n, arcInt.convert(r), path));
             }
         }
 
@@ -48,22 +50,22 @@ public class FlightGraph extends Graph<Airport, Flight> {
         while(!pq.isEmpty()){
 
             PQNode<Airport,Flight> aux =  pq.poll();
-            if(aux.node.getElement() == to){
+            if(aux.node.getElement().equals(to)){
 
-                return path;
+                return aux.usedArcs;
             }
             if(!aux.node.getVisited()){
                 aux.node.setVisited(true);
-                path.add(aux.usedArc);
                 for(Node<Airport, Flight> n : (Set<Node<Airport, Flight>>) aux.node.getAdjacents()){
                     Arc<Airport,Flight> r = (Arc<Airport, Flight>) aux.node.getTree(n, cmp).first();
                     if(!r.getTarget().getVisited())
-                        pq.offer(new Graph.PQNode(r.getTarget(),(arcInt.convert(r)-aux.distance) + aux.distance, r));
+                        aux.usedArcs.add(r);
+                        pq.offer(new Graph.PQNode(r.getTarget(),(arcInt.convert(r)-aux.distance) + aux.distance, aux.usedArcs));
                 }
             }
         }
 
-        return  path;
+        return  null;
 
     }
 
@@ -81,7 +83,6 @@ public class FlightGraph extends Graph<Airport, Flight> {
 
         clearMarks();
         PriorityQueue<PQNode> pq = new PriorityQueue<>();
-        List<Arc<Airport,Flight>> path = new ArrayList<>();
 
         Node<Airport, Flight> origin = nodes.get(from);
         origin.setVisited(true);
@@ -89,7 +90,9 @@ public class FlightGraph extends Graph<Airport, Flight> {
         for(Node<Airport, Flight> n : origin.getAdjacents()){
             Arc<Airport,Flight> r = origin.getTree(n, cmp).first();
             if (r.getData().departureOnDate(days)) {
-                pq.offer(new PQNode(n, r.getData().getFlightDuration(), r));
+                List<Arc<Airport,Flight>> path = new ArrayList<>();
+                path.add(r);
+                pq.offer(new PQNode(n, r.getData().getFlightDuration(), path));
                 r.getData().setTagCurrentTime(r.getData().getFlightDuration());
             }
         }
@@ -98,41 +101,40 @@ public class FlightGraph extends Graph<Airport, Flight> {
         while(!pq.isEmpty()){
 
             PQNode<Airport,Flight> aux =  pq.poll();
-            if(aux.node.getElement() == to){
-
-                return path;
+            if(aux.node.getElement().equals(to)){
+                return aux.usedArcs;
             }
             if(!aux.node.getVisited()) {
                 aux.node.setVisited(true);
-                path.add(aux.usedArc);
                 for (Node<Airport, Flight> n : aux.node.getAdjacents()) {
                     // verfy the node is indeed not visited
                     if(!n.getVisited()) {
                         Arc<Airport,Flight> bestFlightToNode = aux.node.getTree(n, cmp).first();
-                        int bestTime = Day.closestTimeWithOffset((int) aux.distance, bestFlightToNode.getData().getWeekTime(),
+                        int bestWaitTime = Day.closestTimeWithOffset((int) aux.distance, bestFlightToNode.getData().getWeekTime(),
                                 bestFlightToNode.getData().getDepartureTime());
+
                         // we search for the best time in regar to the arrival time
                         for (Arc<Airport, Flight> r : aux.node.getTree(n, cmp)) {
                             // aux.distance is the current time of the week at which the algorithm expects to be
                             // en criollo , es el momento de la semana en que estas cuando llegas a este nodo
-                            int currentArcTime = Day.closestTimeWithOffset((int) aux.distance, r.getData().getWeekTime(),
+                            int currentWaitTime = Day.closestTimeWithOffset((int) aux.distance, r.getData().getWeekTime(),
                                     r.getData().getDepartureTime());
 
-                            if (currentArcTime < bestTime) {
-                                bestTime = currentArcTime;
+                            if (currentWaitTime < bestWaitTime) {
+                                bestWaitTime = currentWaitTime;
                                 bestFlightToNode = r;
                             }
                         }
-
-                        pq.offer(new Graph.PQNode(bestFlightToNode.getTarget(), aux.distance + bestTime +
-                                bestFlightToNode.getData().getFlightDuration(), bestFlightToNode));
+                        aux.usedArcs.add(bestFlightToNode);
+                        pq.offer(new Graph.PQNode(bestFlightToNode.getTarget(), aux.distance + bestWaitTime +
+                                bestFlightToNode.getData().getFlightDuration(), aux.usedArcs));
                     }
 
 
                 }
             }
         }
-        return  path;
+        return  null;
     }
 
 
