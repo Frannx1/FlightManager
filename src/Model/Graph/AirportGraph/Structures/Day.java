@@ -109,6 +109,7 @@ public class Day {
             return String.valueOf(this.index);
         }
 
+        // returns the waiting time you have until the earliest flight
     public static int closestTimeWithOffset(int currentTime, List<Day> days, Integer departureTime) {
         List<Integer> list = new ArrayList<>();
         for (Day day: days) {

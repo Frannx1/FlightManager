@@ -68,11 +68,10 @@ public  class Flight {
      * This method gives you the time offset from the start of the week (Mon 00:00)
      * @return long offset from the start of the week.
      */
-    public List<Integer> getWeekTime(){
-        List<Integer> times = new ArrayList<>();
-
+    public List<Day> getWeekTime(){
+        List<Day> times = new ArrayList<>();
         for(Day d : days){
-            times.add(Day.getIndex(d) * Day.DAY_MIN);
+            times.add(d);
         }
         return times;
     }

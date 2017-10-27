@@ -107,15 +107,28 @@ public class FlightGraph extends Graph<Airport, Flight> {
                 aux.node.setVisited(true);
                 path.add(aux.usedArc);
                 for (Node<Airport, Flight> n : aux.node.getAdjacents()) {
-                    Arc<Airport,Flight> bestFlightToNode = aux.node.getTree(n, cmp).first();
-                    int bestTime = Day.closestTimeWithOffset((aux.distance, bestFlightToNode.getData().getWeekTime(),bestFlightToNode.getData().getDepartureTime() )
-                    for (Arc<Airport, Flight> r : aux.node.getTree(n, cmp)) {
-                        //Arc<Airport,Flight> r =  aux.node.getTree(n, cmp).first();
+                    // verfy the node is indeed not visited
+                    if(!n.getVisited()) {
+                        Arc<Airport,Flight> bestFlightToNode = aux.node.getTree(n, cmp).first();
+                        int bestTime = Day.closestTimeWithOffset((int) aux.distance, bestFlightToNode.getData().getWeekTime(),
+                                bestFlightToNode.getData().getDepartureTime());
+                        // we search for the best time in regar to the arrival time
+                        for (Arc<Airport, Flight> r : aux.node.getTree(n, cmp)) {
+                            // aux.distance is the current time of the week at which the algorithm expects to be
+                            // en criollo , es el momento de la semana en que estas cuando llegas a este nodo
+                            int currentArcTime = Day.closestTimeWithOffset((int) aux.distance, r.getData().getWeekTime(),
+                                    r.getData().getDepartureTime());
 
-                        if (!r.getTarget().getVisited())
-                            pq.offer(new Graph.PQNode(r.getTarget(), aux.distance + , r));
+                            if (currentArcTime < bestTime) {
+                                bestTime = currentArcTime;
+                                bestFlightToNode = r;
+                            }
+                        }
 
+                        pq.offer(new Graph.PQNode(bestFlightToNode.getTarget(), aux.distance + bestTime +
+                                bestFlightToNode.getData().getFlightDuration(), bestFlightToNode));
                     }
+
 
                 }
             }
@@ -123,11 +136,6 @@ public class FlightGraph extends Graph<Airport, Flight> {
         return  path;
     }
 
-    private class PQNodeTimeVariable extends PQNode<Airport,Flight> {
 
-        public PQNodeTimeVariable(Node<Airport, Flight> n, double distance, Arc<Airport, Flight> arc) {
-            super(n, distance, arc);
-        }
-    }
 
 }
