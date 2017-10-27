@@ -35,7 +35,11 @@ public class Airport {
     public int hashCode(){
         int hash = 1;
         hash = hash * 31 + ((name == null) ? 0 : name.hashCode());
-        hash = hash * 29 + ((location == null) ? 0 : location.hashCode());
+        //hash = hash * 29 + ((location == null) ? 0 : location.hashCode());
         return  hash;
+    }
+
+    public String toString(){
+        return "name: " + name + " location:  "+ location.toString();
     }
 }

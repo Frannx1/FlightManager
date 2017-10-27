@@ -8,19 +8,12 @@ public class Graph<T,V> {
     protected Map<V,Arc<T,V>> arcs;
     protected List<Comparator<Arc<T,V>>> comparators;
 
-    public Graph(List<Comparator<V>> comparators) {
+    public Graph(List<Comparator<Arc<T,V>>> comparators) {
         nodes = new HashMap<>();
         arcs = new HashMap<>();
         this.comparators = new ArrayList<>();
 
-        for (Comparator<V> cmp: comparators) {
-            this.comparators.add(new Comparator<Arc<T,V>>() {
-                @Override
-                public int compare(Arc<T,V> o1, Arc<T,V> o2) {
-                    return cmp.compare(o1.getData(), o2.getData());
-                }
-            });
-        }
+        this.comparators = comparators;
     }
 
     public void addNode(T element){

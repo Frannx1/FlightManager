@@ -5,12 +5,11 @@ import Model.Graph.GraphStructures.ArcInterface;
 import Model.Graph.GraphStructures.Graph;
 import Model.Graph.GraphStructures.Node;
 
-import java.awt.datatransfer.FlavorListener;
 import java.util.*;
 
 public class FlightGraph extends Graph<Airport, Flight> {
 
-    public FlightGraph(List<Comparator<Flight>> comparators) {
+    public FlightGraph(List<Comparator<Arc<Airport,Flight>>> comparators) {
         super(comparators);
     }
 
