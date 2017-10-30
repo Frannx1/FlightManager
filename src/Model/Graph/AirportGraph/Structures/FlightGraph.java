@@ -93,7 +93,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
                 List<Arc<Airport,Flight>> path = new ArrayList<>();
                 path.add(r);
                 pq.offer(new PQNode(n, r.getData().getFlightDuration(), path));
-                r.getData().setTagCurrentTime(r.getData().getFlightDuration());
+                r.getData().setTagCurrentTime(r.getData().getFlightDuration() );
             }
         }
 

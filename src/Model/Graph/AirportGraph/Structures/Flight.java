@@ -80,6 +80,7 @@ public class Flight {
         int hash = 1;
         hash = hash + 31 *((airline == null) ? 0 : airline.hashCode());
         hash = hash + 17 * ((flightNumber == null) ? 0 : flightNumber.hashCode());
+        hash = hash + 43 * ((day == null)? 0 : day.hashCode());
         return hash;
     }
 }
