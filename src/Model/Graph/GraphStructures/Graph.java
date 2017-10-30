@@ -2,7 +2,7 @@ package Model.Graph.GraphStructures;
 
 import java.util.*;
 
-public class Graph<T,V> {
+public class  Graph<T,V> {
 
     protected Map<T,Node<T,V>> nodes;
     protected Map<V,Arc<T,V>> arcs;
