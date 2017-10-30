@@ -64,8 +64,9 @@ public class AirportManager {
     }
 
     public void deleteFlight(String airline, String flightNumber) {
-        for (Day day: Day.getAllDays())
-        airportMap.deleteArc(new Flight(airline, flightNumber));
+        for (Day day: Day.getAllDays()) {
+            airportMap.deleteArc(new Flight(airline, flightNumber));
+        }
     }
 
     public void deleteFlights() {
