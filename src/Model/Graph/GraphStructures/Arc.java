@@ -14,8 +14,6 @@ public class Arc<T,V> {
         target.addInArc(this);
     }
 
-
-
     public Node<T,V> getOrigin() {
         return origin;
     }

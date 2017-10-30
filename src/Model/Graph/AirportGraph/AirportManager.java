@@ -52,9 +52,11 @@ public class AirportManager {
     public void addFlight(String airline, String flightNumber, String[] days, String origin, String target,
                           int departureTime, int flightDuration, double price) {
         try {
-            Flight flight = new Flight(airline, flightNumber, Day.getDays(days), departureTime, flightDuration, price);
-            airportMap.addArc(flight, airportMap.getNodeElement(new Airport(origin)),
-                                airportMap.getNodeElement(new Airport(target)));
+            for (Day day: Day.getDays(days)) {
+                Flight flight = new Flight(airline, flightNumber, day, departureTime, flightDuration, price);
+                airportMap.addArc(flight, airportMap.getNodeElement(new Airport(origin)),
+                        airportMap.getNodeElement(new Airport(target)));
+            }
 
         } catch (IllegalFormatException e) {
             e.printStackTrace();
@@ -62,6 +64,7 @@ public class AirportManager {
     }
 
     public void deleteFlight(String airline, String flightNumber) {
+        for (Day day: Day.getAllDays())
         airportMap.deleteArc(new Flight(airline, flightNumber));
     }
 

@@ -5,21 +5,21 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public  class Flight {
+public class Flight {
 
     private String airline;
     private String flightNumber;
-    private List<Day> days;
+    private Day day;
     private Integer departureTime;
     private Integer flightDuration;
     private Double price;
     private int tagCurrentTime;
 
-    public Flight(String airline, String flightNumber, List<Day> days, int departureTime,
+    public Flight(String airline, String flightNumber, Day day, int departureTime,
                   int flightDuration, double price){
         this.airline = airline;
         this.flightNumber = flightNumber;
-        this.days = days;
+        this.day = day;
         this.departureTime = departureTime;
         this.flightDuration = flightDuration;
         this.price = price;
@@ -56,28 +56,11 @@ public  class Flight {
     }
 
     public boolean departureOnDate(List<Day> days){
-        for(Day d : days){
-            if(this.days.contains(d)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * This method gives you the time offset from the start of the week (Mon 00:00)
-     * @return long offset from the start of the week.
-     */
-    public List<Day> getWeekTime(){
-        List<Day> times = new ArrayList<>();
-        for(Day d : days){
-            times.add(d);
-        }
-        return times;
+        return days.contains(this.day);
     }
 
     public int timeToNext() {
-        return Day.closestTimeWithOffset(tagCurrentTime, days, departureTime);
+        return Day.closestTimeWithOffset(tagCurrentTime, day, departureTime);
     }
 
     @Override
