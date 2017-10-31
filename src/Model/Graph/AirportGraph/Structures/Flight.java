@@ -23,7 +23,6 @@ public class Flight {
         this.departureTime = departureTime;
         this.flightDuration = flightDuration;
         this.price = price;
-        this.tagCurrentTime = 0;
     }
 
     public Flight(String airline, String flightNumber){
@@ -51,10 +50,6 @@ public class Flight {
         return price;
     }
 
-    public Integer getDayOffset(){
-        return Day.DAY_MIN * Day.getIndex(day);
-    }
-
     public void setTagCurrentTime(int currentTime) {
         this.tagCurrentTime = currentTime;
     }
@@ -67,30 +62,19 @@ public class Flight {
         return days.contains(this.day);
     }
 
-    //TODO: create mathod getWeekTime.
-    //TODO: create mathod getCurrentDayIndex.
-    //TODO: create mathod getFlightTime.
-    //TODO: create mathod getOrigin.
-    //TODO: create mathod getTarget.
-
     public int timeToNext() {
-        ArrayList<Day> days = new ArrayList<Day>();
-        days.add(this.day);
-        return Day.closestTimeWithOffset(tagCurrentTime, days, departureTime);
+        return Day.closestTime(tagCurrentTime, day, departureTime);
     }
 
-    public int arrivalTime( int currentTime){
+    public int arrivalTime(int currentTime){
         return Day.arrivalTime(currentTime, day, departureTime, flightDuration);
     }
-
 
     public String toString(){
 
         String s = String.format("FLIGHT DETAILS:[ NUMBER: %s  DEPARTURE: %s AT %d:%d  DURATION: %d:%d AIRLINE: %s ]",flightNumber,day.toString() , departureTime/60,departureTime%60, flightDuration/60, flightDuration%60,airline  );
         return s;
     }
-
-
 
     @Override
     public boolean equals(Object obj){

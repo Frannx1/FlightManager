@@ -81,6 +81,14 @@ public class  Graph<T,V> {
         return comparators.get(index);
     }
 
+    public Set<T> getNodesElements() {
+        return nodes.keySet();
+    }
+
+    public Set<V> getArcsData() {
+        return arcs.keySet();
+    }
+
     /**
      * This method will give you give you the path of minimum weight for the given nodes.
      * @param from the value of the node from which you want to start.

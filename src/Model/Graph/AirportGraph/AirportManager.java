@@ -6,10 +6,7 @@ import Model.Graph.GraphStructures.Arc;
 import Model.Graph.GraphStructures.ArcInterface;
 import Model.Graph.GraphStructures.Graph;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.IllegalFormatException;
-import java.util.List;
+import java.util.*;
 
 
 public class AirportManager {
@@ -82,6 +79,13 @@ public class AirportManager {
         airportMap.deleteArcs();
     }
 
+    public Set<Airport> getAirports() {
+        return airportMap.getNodesElements();
+    }
+
+    public Set<Flight> getFlights() {
+        return airportMap.getArcsData();
+    }
 
     //Dijkstra
     public List<Arc<Airport,Flight>> findPath(String origin, String dest, Comparator<Arc<Airport,Flight>> cmp,
