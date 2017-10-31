@@ -59,8 +59,17 @@ public class Flight {
         return days.contains(this.day);
     }
 
-    public int timeToNext() {
-        return Day.closestTimeWithOffset(tagCurrentTime, day, departureTime);
+    //TODO: create mathod getWeekTime.
+    //TODO: create mathod getCurrentDayIndex.
+    //TODO: create mathod getFlightTime.
+    //TODO: create mathod getOrigin.
+    //TODO: create mathod getTarget.
+
+    public int timeToNext()
+    {
+        ArrayList<Day> days = new ArrayList<Day>();
+        days.add(this.day);
+        return Day.closestTimeWithOffset(tagCurrentTime, days, departureTime);
     }
 
     @Override
