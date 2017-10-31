@@ -79,8 +79,8 @@ public class AirportManager {
         airportMap.deleteArcs();
     }
 
-    public Set<Airport> getAirports() {
-        return airportMap.getNodesElements();
+    public List<Airport> getAirports() {
+        return (List<Airport>) airportMap.getNodesElements();
     }
 
     public Set<Flight> getFlights() {
