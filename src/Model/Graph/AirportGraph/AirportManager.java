@@ -145,7 +145,7 @@ public class AirportManager {
         List<Arc<Airport,Flight>> route = a.airportMap.minTotalTimePath(from, to ,a.cmpFlightDuration, ldays);
 
         for(Arc<Airport,Flight> r : route){
-            System.out.println("Origin: "+ r.getOrigin() + " dest: "+ r.getTarget());
+            System.out.println("Origin: "+ r.getOrigin() + " dest: "+ r.getTarget() + " "+ r.getData());
         }
 
         System.out.println("Total time: " + route.get(route.size()-1).getData().getTagCurrentTime()/60 + "hs" );

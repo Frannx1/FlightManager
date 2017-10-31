@@ -73,19 +73,24 @@ public class Flight {
     //TODO: create mathod getOrigin.
     //TODO: create mathod getTarget.
 
-    public int timeToNext()
-    {
+    public int timeToNext() {
         ArrayList<Day> days = new ArrayList<Day>();
         days.add(this.day);
         return Day.closestTimeWithOffset(tagCurrentTime, days, departureTime);
-    public int timeToNext() {
-        //return Day.closestTimeWithOffset(tagCurrentTime, day, departureTime);
-        return 1;
     }
 
     public int arrivalTime( int currentTime){
         return Day.arrivalTime(currentTime, day, departureTime, flightDuration);
     }
+
+
+    public String toString(){
+
+        String s = String.format("FLIGHT DETAILS:[ NUMBER: %s  DEPARTURE: %s AT %d:%d  DURATION: %d:%d AIRLINE: %s ]",flightNumber,day.toString() , departureTime/60,departureTime%60, flightDuration/60, flightDuration%60,airline  );
+        return s;
+    }
+
+
 
     @Override
     public boolean equals(Object obj){

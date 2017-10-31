@@ -103,10 +103,30 @@ public class Day {
         }
         return s;
     }
+    public static String getDayString(int index) {
+        String s = new String();
+            switch( index){
+                case 0: s = s.concat("Lu");
+                    break;
+                case 1: s =s.concat("Ma");
+                    break;
+                case 2: s = s.concat("Mi");
+                    break;
+                case 3: s = s.concat("Ju");
+                    break;
+                case 4: s = s.concat("Vi");
+                    break;
+                case 5: s = s.concat("Sa");
+                    break;
+                case 6: s = s.concat("Do");
+                    break;
 
+                }
+        return s;
+    }
     @Override
     public String toString(){
-            return String.valueOf(this.index);
+            return getDayString(this. index);
         }
 
 
