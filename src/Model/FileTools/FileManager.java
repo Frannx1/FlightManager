@@ -1,23 +1,13 @@
-/*
+
 package Model.FileTools;
-*/
-/*
+
 import Model.trash.AirportManager;
-//import Model.trash.Airport;
-import Model.trash.Flight;*//*
-
-
-import Model.Graph.AirportGraph.Structures.Airport;
 import Model.Graph.AirportGraph.Structures.Day;
-import Model.Graph.AirportGraph.Structures.Flight;
 import Model.Graph.GraphStructures.Node;
-import Model.Graph.AirportGraph.AirportManager;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
