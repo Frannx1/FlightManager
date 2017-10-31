@@ -15,6 +15,7 @@ import java.util.List;
 public class AirportManager {
 
     private FlightGraph airportMap;
+    //private HashMap< ?, List<Airport>> table;
 
     private Comparator<Arc<Airport,Flight>> cmpFlightDuration = new Comparator<Arc<Airport,Flight>>() {
         @Override
@@ -82,6 +83,7 @@ public class AirportManager {
     }
 
 
+    //Dijkstra
     public List<Arc<Airport,Flight>> findPath(String origin, String dest, Comparator<Arc<Airport,Flight>> cmp,
                          ArcInterface<Arc<Airport,Flight>> arcInt, List<Day>departureDays){
 
