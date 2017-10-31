@@ -51,8 +51,16 @@ public class Flight {
         return price;
     }
 
+    public Integer getDayOffset(){
+        return Day.DAY_MIN * Day.getIndex(day);
+    }
+
     public void setTagCurrentTime(int currentTime) {
         this.tagCurrentTime = currentTime;
+    }
+
+    public int getTagCurrentTime(){
+        return tagCurrentTime;
     }
 
     public boolean departureOnDate(List<Day> days){
@@ -70,6 +78,13 @@ public class Flight {
         ArrayList<Day> days = new ArrayList<Day>();
         days.add(this.day);
         return Day.closestTimeWithOffset(tagCurrentTime, days, departureTime);
+    public int timeToNext() {
+        //return Day.closestTimeWithOffset(tagCurrentTime, day, departureTime);
+        return 1;
+    }
+
+    public int arrivalTime( int currentTime){
+        return Day.arrivalTime(currentTime, day, departureTime, flightDuration);
     }
 
     @Override

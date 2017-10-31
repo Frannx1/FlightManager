@@ -74,6 +74,9 @@ public class Node<T,V> {
             for (TreeSet<Arc<T,V>> set: nodeArcs) {
                 set.remove(arc);
             }
+            if(outArcsMap.get(arc.getTarget()).get(0).isEmpty()) {
+                outArcsMap.remove(arc.getTarget());
+            }
         }
     }
 
@@ -128,4 +131,5 @@ public class Node<T,V> {
     public String toString(){
         return this.element.toString();
     }
+
 }

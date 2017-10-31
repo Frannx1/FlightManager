@@ -13,7 +13,7 @@ public class Day {
     private static final Day SATURDAY = new Day(5);
     private static final Day SUNDAY = new Day(6);
 
-    private final int index;
+    private  int index ;
     public static final int DAY_MIN = 60*24;
     private static final int WEEK_MIN = DAY_MIN * 7;
 
@@ -109,7 +109,37 @@ public class Day {
             return String.valueOf(this.index);
         }
 
+
     // returns the waiting time you have until the earliest flight
+
+    /**
+     * This method returns the next time to a flight from the current time, all time is measure in minutes.
+     * @param currentTime the current time measure from the begining of the week.
+     * @param day a list of posible days inn which the flight operates.
+     * @param departureTime the departure time for the specify flight.
+     * @return the time at which the flight will arrive to the new destination.
+     */
+
+    public static int arrivalTime(int currentTime, Day day, Integer departureTime, Integer flightDuration) {
+        List<Integer> weekSchedule = new ArrayList<>();
+
+        int currentWeekMin = currentTime % WEEK_MIN;// first we get the minutes a week interval.
+        int currentDay = currentWeekMin / DAY_MIN; // here we get the index of the day in which you are currently at.
+        int dif = currentWeekMin - ( getIndex(day) * DAY_MIN + departureTime) ;
+        if( dif <= 0 ){
+            return (-1 * dif + flightDuration + currentWeekMin) % WEEK_MIN;
+        }
+        else {
+
+            return WEEK_MIN - dif + flightDuration;
+        }
+
+
+    }
+
+
+
+
     public static int closestTimeWithOffset(int currentTime, List<Day> days, Integer departureTime) {
         List<Integer> list = new ArrayList<>();
         for (Day day: days) {
@@ -126,5 +156,9 @@ public class Day {
         }
         return list.get(index+1) - list.get(index);
     }
+
+
+
+
 }
 
