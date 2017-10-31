@@ -40,7 +40,6 @@ public class FileManager {
 
     public void saveFile(String outputFileAirports, String outputFileFlights) throws IOException {
         String newLine = System.getProperty("line.separator");
-        //AirportManager airport = AirportManager.getInstance();
 
         if(this.airport.getAirportsDijkstra().isEmpty()) {
             System.out.println("NotFound");
@@ -55,7 +54,7 @@ public class FileManager {
                 if(!airport.getFlights().values().isEmpty()) {
                     File flightFile = new File(path,outputFileFlights);
                     FileWriter flightWriter = new FileWriter(flightFile, true);
-                    airport = AirportManager.getInstance();
+                    airport = AirportManager.;
                     for(Flight fl : airport.getFlights().values()){
                         flightWriter.write(fl.getAirline() + "#" + fl.getFlightNumber() + "#" + Day.getDays(fl.getDays()) + "#" + fl.getOrigin() + "#" + fl.getTarget() + "#" + getDepartureTimeFormat(fl.getDepartureTime()) + "#" + getFlightTimeFormat(fl.getFlightTime()) + "#" + fl.getPrice() + newLine);
                     }
@@ -123,9 +122,9 @@ public class FileManager {
                 aux = Math.abs(fl.getDepartureTime()+fl.getCurrentDayIndex()*(60*24)-(arrivalTime%(60*7*24)));
             }else
                 aux = (7*60*24) - Math.abs(fl.getDepartureTime()+fl.getCurrentDayIndex()*(60*24)-(arrivalTime%(60*7*24)));
-            arrivalTime += fl.getFlightTime()+aux;
+            arrivalTime += fl.getFlightDuration()+aux;
             price += fl.getPrice();
-            flightTime += fl.getFlightTime();
+            flightTime += fl.getFlightDuration();
         }
         totalTime = arrivalTime-initialTime;
         int totalHours = totalTime/60;

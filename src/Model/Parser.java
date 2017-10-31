@@ -189,9 +189,9 @@ public class Parser {
             fileManager.load(airportFile, flightFile);
         }
         else if(Pattern.matches(exitSaveExpReg, command)){
-            fileManager.deleteExistingAirportFile(airportFile);
-            fileManager.deleteExistingFlightFile(flightFile);
-            fileManager.save(airportFile, flightFile);
+            fileManager.deleteOldAirportFile(airportFile);
+            fileManager.deleteOldFlightFile(flightFile);
+            fileManager.saveFile(airportFile, flightFile);
             return true;
         }
         else if(Pattern.matches(quitExpReg, command)){
