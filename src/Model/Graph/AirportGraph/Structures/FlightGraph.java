@@ -185,12 +185,40 @@ public class FlightGraph extends Graph<Airport, Flight> {
         return null;
     }
 
-    private Solution<Flight> world_Trip(Airport from, Airport current, Solution<Flight> solution, int n, int price){
+    private Solution<Flight> world_Trip(Airport from, Airport current, Solution<Flight> solution, int n, int price,List<Day> days){
+        if (solution.hasSolution() && !solution.betterThanBest()){
+            return solution;
+        }
         Node<Airport,Flight> curr=nodes.get(current);
         Node<Airport,Flight> origin=nodes.get(from);
         if (n==0){
-            if(curr);
+            /**
+             * If (curr tiene vuelo a Origen){
+             *  agregar mejor vuelo a Solution.
+             *  Comparar con bestTrip, si hay
+             *  Actualizar BestTrip;
+             *  Return Solution;
+             * }
+             */
+            return;
         }
+        PriorityQueue<PQNode> pq = new PriorityQueue<>();
+        curr.setVisited(true);
+        for (Node<Airport,Flight> m:curr.getAdjacents()){
+            Arc<Node<Airport,Flight>> r=curr.getTree(m,cmp);
+            if (r.getData().departureOnDate(days)) {
+                List<Arc<Airport,Flight>> path= new ArrayList<>();
+                path.add(r);
+                pq.offer(new PQNode<>(n,arcInt.convert(r),path));
+            }
+        }
+        if (pq.isEmpty()){
+            //No flight does match the requested departureDay;
+            return null;
+        }
+
+
+
     }
     /**
     PriorityQueue<PQNode> pq = new PriorityQueue<>();
