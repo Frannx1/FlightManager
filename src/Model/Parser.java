@@ -3,7 +3,10 @@ package Model;
 import Model.FileTools.FileFormat;
 import Model.FileTools.FileManager;
 import Model.Graph.AirportGraph.AirportManager;
+import Model.Graph.AirportGraph.Structures.Airport;
 import Model.Graph.AirportGraph.Structures.Day;
+import Model.Graph.AirportGraph.Structures.Flight;
+import Model.Graph.GraphStructures.Arc;
 
 import java.io.IOException;
 import java.util.List;
@@ -149,9 +152,10 @@ public class Parser {
                     return false;
                 }
                 List<Day> newDays = Day.getDays(days);
-                airportManager.findRoute(source,target,priority,newDays, fileFormat, output);
+                List<Arc<Airport, Flight>> list = airportManager.findRoute(source,target,priority,newDays);
+                //fileManager.writeRoute( ,output, fileFormat);
             }else
-                airportManager.findRoute(source,target,priority,Day.getAllDays(), fileFormat, output);
+                //List<Arc<Airport, Flight>> list = airportManager.findRoute(source,target,priority,Day.getAllDays());
             return false;
         }
 
