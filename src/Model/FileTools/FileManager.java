@@ -114,15 +114,15 @@ public class FileManager {
         double price = 0.0;
         int flightTime = 0;
         int totalTime = 0;
-        int initialTime = route.get(0).getDepartureTime()+route.get(0).getCurrentDayIndex()*(60*24);
+        int initialTime = route.get(0).getDepartureTime()+route.get(0).getDayIndex()*(60*24);
         int arrivalTime = initialTime;
         for(Flight fl: route){
             int aux ;
-            if(fl.getDepartureTime()+fl.getCurrentDayIndex()*(60*24) >= (arrivalTime%(60*7*24))){
-                aux = Math.abs(fl.getDepartureTime()+fl.getCurrentDayIndex()*(60*24)-(arrivalTime%(60*7*24)));
+            if(fl.getDepartureTime()+fl.getDayIndex()*(60*24) >= (arrivalTime%(60*7*24))){
+                aux = Math.abs(fl.getDepartureTime()+fl.getDayIndex()*(60*24)-(arrivalTime%(60*7*24)));
             }else
-                aux = (7*60*24) - Math.abs(fl.getDepartureTime()+fl.getCurrentDayIndex()*(60*24)-(arrivalTime%(60*7*24)));
-            arrivalTime += fl.getFlightDuration()+aux;
+                aux = (7*60*24) - Math.abs(fl.getDepartureTime()+fl.getDayIndex()*(60*24)-(arrivalTime%(60*7*24)));
+            arrivalTime += fl.getFlightDuration()+aux;ar
             price += fl.getPrice();
             flightTime += fl.getFlightDuration();
         }

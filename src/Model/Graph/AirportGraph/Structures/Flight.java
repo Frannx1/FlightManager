@@ -27,6 +27,10 @@ public class Flight {
         this.flightNumber = flightNumber;
     }
 
+    public int getDayIndex(){
+        return Day.getIndex(this.day);
+    }
+
     public String getAirline() {
         return airline;
     }
