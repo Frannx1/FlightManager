@@ -1,13 +1,11 @@
 package Model.Graph.AirportGraph;
 
 
-import Model.FileTools.FileFormat;
 import Model.FlightPriority;
 import Model.Graph.AirportGraph.Structures.*;
 import Model.Graph.GraphStructures.Arc;
 import Model.Graph.GraphStructures.ArcInterface;
 import Model.Graph.GraphStructures.Graph;
-import Model.Graph.GraphStructures.Node;
 
 import java.util.*;
 
@@ -15,7 +13,8 @@ import java.util.*;
 public class AirportManager {
 
     private FlightGraph airportMap;
-    //private HashMap< ?, List<Airport>> table;
+    List<Comparator<Arc<Airport,Flight>>> comparators;
+    List<ArcInterface<Arc<Airport,Flight>>> interfaces;
 
     private Comparator<Arc<Airport,Flight>> cmpFlightDuration = new Comparator<Arc<Airport,Flight>>() {
         @Override
@@ -38,11 +37,29 @@ public class AirportManager {
         }
     };
 
+    ArcInterface<Arc<Airport,Flight>> arcIntDuration = new ArcInterface<Arc<Airport,Flight>>(){
+        public double convert(Arc<Airport,Flight> arc ){
+            return (double) arc.getData().getFlightDuration();
+        }
+    };
+
+    ArcInterface<Arc<Airport,Flight>> arcIntPrice = new ArcInterface<Arc<Airport,Flight>>(){
+        public double convert(Arc<Airport,Flight> arc ){
+            return arc.getData().getPrice();
+
+        }
+    };
+
     public AirportManager() {
-        List<Comparator<Arc<Airport,Flight>>> comparators = new ArrayList<>();
+        comparators = new ArrayList<>();
         comparators.add(cmpFlightDuration);
         comparators.add(cmpPrecio);
         comparators.add(cmpTotalFlightTime);
+
+        interfaces = new ArrayList<>();
+        interfaces.add(arcIntDuration);
+        interfaces.add(arcIntPrice);
+
         airportMap = new FlightGraph(comparators);
     }
 
@@ -90,13 +107,18 @@ public class AirportManager {
         return airportMap.getArcsData();
     }
 
-    //Dijkstra
-    public List<Arc<Airport,Flight>> findPath(String origin, String dest, Comparator<Arc<Airport,Flight>> cmp,
-                         ArcInterface<Arc<Airport,Flight>> arcInt, List<Day>departureDays){
-
-        List<Arc<Airport,Flight>> result =  airportMap.minPath(airportMap.getNodeElement(new Airport(origin)), airportMap.getNodeElement(new Airport(dest))
-        , arcInt, cmp, departureDays);
-        return result;
+    public List<Arc<Airport,Flight>> findRoute(String origin, String dest, FlightPriority priority,
+                                               List<Day> departureDays) {
+        int index = priority.getValue();
+        if(priority == FlightPriority.TOTAL_TIME) {
+            return airportMap.minTotalTimePath(airportMap.getNodeElement(new Airport(origin)),
+                    airportMap.getNodeElement(new Airport(dest)), comparators.get(index), departureDays);
+        }
+        else {
+            return airportMap.minPath(airportMap.getNodeElement(new Airport(origin)),
+                    airportMap.getNodeElement(new Airport(dest)), interfaces.get(index), comparators.get(index),
+                    departureDays);
+        }
     }
 
 
