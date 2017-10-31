@@ -122,7 +122,7 @@ public class FileManager {
                 aux = Math.abs(fl.getDepartureTime()+fl.getDayIndex()*(60*24)-(arrivalTime%(60*7*24)));
             }else
                 aux = (7*60*24) - Math.abs(fl.getDepartureTime()+fl.getDayIndex()*(60*24)-(arrivalTime%(60*7*24)));
-            arrivalTime += fl.getFlightDuration()+aux;ar
+            arrivalTime += fl.getFlightDuration()+aux;
             price += fl.getPrice();
             flightTime += fl.getFlightDuration();
         }
