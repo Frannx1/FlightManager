@@ -4,9 +4,7 @@ package Model.FileTools;
 import Model.Graph.AirportGraph.AirportManager;
 import Model.Graph.AirportGraph.Structures.Airport;
 import Model.Graph.AirportGraph.Structures.Flight;
-import Model.Graph.AirportGraph.Structures.Day;
 import Model.Graph.GraphStructures.Arc;
-import Model.Graph.GraphStructures.Node;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -43,28 +41,26 @@ public class FileManager {
     public void saveFile(String outputFileAirports, String outputFileFlights) throws IOException {
         String newLine = System.getProperty("line.separator");
 
-        if(this.airport.getAirportsDijkstra().isEmpty()) {
+        if(this.airport.getAirports().isEmpty()) {
             System.out.println("NotFound");
         } else {
                 File airportFile = new File(path,outputFileAirports);
                 FileWriter AirportWriter = new FileWriter(airportFile, true);
 
-                for(Node air : airport.getAirportsDijkstra()){
-                    AirportWriter.write(air.airport.getName() + "#" + air.airport.getLatitude() + "#" + air.airport.getLongitude() + newLine);
+                for(Airport air : airport.getAirports()){
+                    AirportWriter.write(air.getName() + "#" + air.getLocation().getLatitude() + "#" + air.getLocation().getLongitude() + newLine);
                 }
                 AirportWriter.close();
                 if(!airport.getFlights().isEmpty()) {
                     File flightFile = new File(path,outputFileFlights);
                     FileWriter flightWriter = new FileWriter(flightFile, true);
-                    airport = AirportManager.;
-                    for(Flight fl : airport.getFlights()){
-                        flightWriter.write(fl.getAirline() + "#" + fl.getFlightNumber() + "#" + Day.getDays(fl.getDay()) + "#" + fl.getOrigin() + "#" + fl.getTarget() + "#" + getDepartureTimeFormat(fl.getDepartureTime()) + "#" + getFlightTimeFormat(fl.getFlightDuration()) + "#" + fl.getPrice() + newLine);
+                    for(Arc<Airport, Flight> fl : airport.getAirportArcs()){
+                        flightWriter.write(fl.getData().getAirline() + "#" + fl.getData().getFlightNumber() + "#" + fl.getData().getDay() + "#" + fl.getOrigin() + "#" + fl.getTarget() + "#" + getDepartureTimeFormat(fl.getData().getDepartureTime()) + "#" + getFlightTimeFormat(fl.getData().getFlightDuration()) + "#" + fl.getData().getPrice() + newLine);
                     }
                     flightWriter.close();
                 } else {
                     System.out.println("NotFound");
                 }
-
         }
 
         return;
@@ -160,6 +156,7 @@ public class FileManager {
                     System.out.println("Se ha cargado el resultado en el archivo: "+output);
                 } catch (IOException e) {
                     System.out.println("NotFound");
+                    System.out.println(e);
                     return false;
                 }
             }
@@ -190,7 +187,7 @@ public class FileManager {
                     System.out.println("</Placemark>");
 
                     System.out.println("<Placemark>");
-                    System.out.println("<name>" + fl.getTarget() + "</name>");
+                    System.out.println("<name>" + fl.getTarget().getElement().getName() + "</name>");
                     System.out.println("<Point>");
                     System.out.println("<Description></Description>");
                     System.out.println("<coordinates>" + fl.getTarget().getElement().getLocation().getLatitude() + ", " + fl.getTarget().getElement().getLocation().getLongitude() + ",0" + "</coordinates>");
@@ -201,6 +198,7 @@ public class FileManager {
                 System.out.println("</kml>");
             } else {
                 try {
+                    output = output.concat(".kml");
                     File toWrite = new File(path,output);
                     if(toWrite.exists()){
                         toWrite.delete();
@@ -225,8 +223,8 @@ public class FileManager {
                         writer.write("<name>" + fl.getData().getAirline() + "#" + fl.getData().getFlightNumber() + "</name>" + newLine);
                         writer.write("<LineString>" + newLine);
                         writer.write("<tessellate>0</tessellate>" + newLine);
-                        writer.write("<coordinates>" +  fl.getOrigin().getElement().getLocation().getLatitude() + ", " + fl.getOrigin().getElement().getLocation().getLatitude() + ",0" + newLine);
-                        writer.write(fl.getTarget().getElement().getLocation().getLatitude() + ", " + fl.getTarget().getElement().getLocation().getLatitude() + ",0" + "</coordinates>" + newLine);
+                        writer.write("<coordinates>" +  fl.getOrigin().getElement().getLocation().getLatitude() + ", " + fl.getOrigin().getElement().getLocation().getLongitude() + ",0" + newLine);
+                        writer.write(fl.getTarget().getElement().getLocation().getLatitude() + ", " + fl.getTarget().getElement().getLocation().getLongitude() + ",0" + "</coordinates>" + newLine);
                         writer.write("</LineString>" + newLine);
                         writer.write("</Placemark>" + newLine);
 
@@ -248,12 +246,14 @@ public class FileManager {
                 }
             }
         } else {
-            System.out.println("NotFound");
+            System.out.println("NotFound ");
             return false;
         }
 
         return true;
     }
+
+    //findRoute src=BUE dst=CHI priority=ft weekdays=Lu
 
     public  void readFlights(String file) throws FileNotFoundException {
         File toRead = new File(path,file);

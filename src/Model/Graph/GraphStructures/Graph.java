@@ -89,47 +89,10 @@ public class  Graph<T,V> {
         return arcs.keySet();
     }
 
-    /**
-     * This method will give you give you the path of minimum weight for the given nodes.
-     * @param from the value of the node from which you want to start.
-     * @param to the value of the node in  which you want to end.
-     * @param arcInt Interface which determines how the data of an arc can ve interpreted as a weight
-     * @return A list of all visited nodes that forms the path.
-     */
 
-    // pedimos una interface y no agregamos el metodo en arc porque vamos a querer el camino con respescto a
-    // tres distintos aspectos, asi que no puedo tener en cuenta eso es un arc normal.
-
-//    public List<Arc<T,V>> minPath(T from, T to, ArcInterface<Arc<T,V>> arcInt, Comparator<Arc<T,V>> cmp){
-//        if(from == null || to == null){
-//            throw new IllegalArgumentException("Bad input.");
-//        }
-//        clearMarks();
-//        PriorityQueue<PQNode> pq = new PriorityQueue<>();
-//
-//        pq.offer(new PQNode(nodes.get(from), 0, null));
-//
-//        List<Arc<T,V>> path = new ArrayList<>();
-//
-//        while(!pq.isEmpty()){
-//
-//            PQNode<T,V> aux = pq.poll();
-//            if(aux.node.getElement() == to){
-//
-//               return path;
-//            }
-//            if(!aux.node.getVisited()){
-//                aux.node.setVisited(true);
-//                path.add(aux.usedArc);
-//                for(Node n : aux.node.getAdjacents()){
-//                    Arc<T,V> r = (Arc) aux.node.getTree(n,cmp).first();
-//                    if(!r.getTarget().getVisited())
-//                        pq.offer(new PQNode(r.getTarget(),arcInt.convert(r) + aux.distance, r));
-//                }
-//            }
-//        }
-//        return  path;
-//    }
+    public Collection<Arc<T,V>> getArcs(){
+        return arcs.values();
+    }
 
     protected void clearMarks(){
         for (Node<T,V> n : nodes.values()){

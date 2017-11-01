@@ -1,6 +1,8 @@
 package Model.Graph.AirportGraph;
 
 
+import Model.FileTools.FileFormat;
+import Model.FileTools.FileManager;
 import Model.FlightPriority;
 import Model.Graph.AirportGraph.Structures.*;
 import Model.Graph.GraphStructures.Arc;
@@ -118,15 +120,18 @@ public class AirportManager {
         }
     }
 
+    public Collection<Arc<Airport,Flight>> getAirportArcs(){
+        return this.airportMap.getArcs();
+    }
 
 
     public static void main(String[] args){
         AirportManager a = new AirportManager();
         a.addAirport("ARG", 0,0);
-        a.addAirport("CHI", 1,0);
+        a.addAirport("CHI", 1,2);
         a.addAirport("BRA", 2,0);
         a.addAirport("URU", 3,0);
-        a.addAirport("PAR", 4,0);
+        a.addAirport("PAR", 4,5);
 
 
 
@@ -170,17 +175,16 @@ public class AirportManager {
         ldays.add(Day.getDay(0));
         ldays.add(Day.getDay(1));
 
-        List<Arc<Airport,Flight>> route = a.airportMap.minTotalTimePath(from, to ,a.cmpFlightDuration, ldays);
 
-        //List<Arc<Airport,Flight>> route = a.findRoute("ARG", "CHI", FlightPriority.TOTAL_TIME, ldays);
-        for(Arc<Airport,Flight> r : route){
-            System.out.println("Origin: "+ r.getOrigin() + " dest: "+ r.getTarget() + " "+ r.getData());
-        }
+        List<Arc<Airport,Flight>> route = a.findRoute("ARG", "CHI", FlightPriority.TOTAL_TIME, ldays);
 
-        System.out.println("Total time: " + route.get(route.size()-1).getData().getTagCurrentTime()/60 + "hs" );
+        FileManager fm = new FileManager("./", a);
+
+        fm.writeRoute(route,"stdout", FileFormat.TEXT);
 
 
-        System.out.println("done");
+
+
 
     }
 
