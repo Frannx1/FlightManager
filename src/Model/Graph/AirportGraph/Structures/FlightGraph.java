@@ -169,140 +169,218 @@ public class FlightGraph extends Graph<Airport, Flight> {
      * <p>
      * Armando busqueda de ciclos Hamiltoniano
      **/
-//    public List<Arc<Airport, Flight>> world_trip(Airport from, ArcInterface<Arc<Airport, Flight>> arcInt,
-//                                                 Comparator<Arc<Airport, Flight>> cmp, List<Day> days) {
-//        if (from == null || to == null) {
-//            throw new IllegalArgumentException("Bad input.");
-//        }
-//
-//        if (!nodes.containsKey(from) || !nodes.containsKey(to)) {
-//            return null;
-//        }
-//
-//        clearMarks();
-//        Solution<Flight> solution = new Solution<Flight>();
-//        solution = world_Trip();
-//        if (solution.hasSolution()) {
-//            return solution.toList();
-//        }
-//        return null;
-//    }
-//
-//    private Solution<Flight> world_Trip(Airport from, Airport current, Solution<Flight> solution, int n, int price,List<Day> days){
-//        if (solution.hasSolution() && !solution.betterThanBest()){
-//            return solution;
-//        }
-//        Node<Airport,Flight> curr=nodes.get(current);
-//        Node<Airport,Flight> origin=nodes.get(from);
-//        if (n==0){
-//            /**
-//             * If (curr tiene vuelo a Origen){
-//             *  agregar mejor vuelo a Solution.
-//             *  Comparar con bestTrip, si hay
-//             *  Actualizar BestTrip;
-//             *  Return Solution;
-//             * }
-//             */
-//            return;
-//        }
-//        PriorityQueue<PQNode> pq = new PriorityQueue<>();
-//        curr.setVisited(true);
-//        for (Node<Airport,Flight> m:curr.getAdjacents()){
-//            Arc<Node<Airport,Flight>> r=curr.getTree(m,cmp);
-//            if (r.getData().departureOnDate(days)) {
-//                List<Arc<Airport,Flight>> path= new ArrayList<>();
-//                path.add(r);
-//                pq.offer(new PQNode<>(n,arcInt.convert(r),path));
-//            }
-//        }
-//        if (pq.isEmpty()){
-//            //No flight does match the requested departureDay;
-//            return null;
-//        }
-//
-//
-//
-//    }
-    /**
-    PriorityQueue<PQNode> pq = new PriorityQueue<>();
-
-
-        Node<Airport, Flight> origin = nodes.get(from);
-        origin.setVisited(true);
-
-        for(Node<Airport, Flight> n : origin.getAdjacents()){
-            Arc<Airport,Flight> r = origin.getTree(n, cmp).first();
-            if(r.getData().departureOnDate(days)) {
-                List<Arc<Airport,Flight>> path = new ArrayList<>();
-                path.add(r);
-                pq.offer(new PQNode(n, arcInt.convert(r), path));
-            }
+    public List<Arc<Airport, Flight>> world_trip(Airport from, Comparator<Arc<Airport, Flight>> cmp, List<Day> days,String case) {
+        if (from == null ) {
+            throw new IllegalArgumentException("Bad input.");
         }
-
-        if(pq.isEmpty()){
-            // no flight does match the requested departure day
+        if (!nodes.containsKey(from))) {
             return null;
         }
+        clearMarks();
+        clearArcMarks();
+        Solution<Flight> solution=new Solution<>();
+        switch (case){
+            case("ft"):
+                solution=world_Trip_ft(from,from,solution,this.nodes.size(),new World_tripComparator(cmp),days);
+                break;
+            case ("pr"):
+                solution=world_Trip_pr(from,from,solution,this.nodes.size(),new World_tripComparator(cmp),days);
+                break;
+            case("tt"):
+                solution=world_Trip_pr(from,from,solution,this.nodes.size(),new World_tripComparator(cmp),days);
+                break;
 
-        while(!pq.isEmpty()){
+        }
+        if (solution.hasSolution()) {
+            return solution.toList();
+        }
+        return null;
+    }
+    
+    private Solution<Flight> world_Trip_pr(Airport from, Airport current, Solution<Flight> solution, int n,
+                                           Comparator<Arc<Airport,Flight>>cmp, List<Day> days){
 
-            PQNode<Airport,Flight> aux =  pq.poll();
-            if(aux.node.getElement().equals(to)){
+        Node<Airport,Flight> curr=nodes.get(current);
+        Node<Airport,Flight> origin=nodes.get(from);
 
-                return aux.usedArcs;
-            }
-            if(!aux.node.getVisited()){
-                aux.node.setVisited(true);
-                for(Node<Airport, Flight> n : (Set<Node<Airport, Flight>>) aux.node.getAdjacents()){
-                    Arc<Airport,Flight> r = (Arc<Airport, Flight>) aux.node.getTree(n, cmp).first();
-                    if(!r.getTarget().getVisited())
-                        aux.usedArcs.add(r);
-                    pq.offer(new Graph.PQNode(r.getTarget(),(arcInt.convert(r)-aux.distance) + aux.distance, aux.usedArcs));
-                }
-            }
+        if (n==0 && curr.equals(origin)){
+            solution.updateSolution();
+            return solution;
         }
 
-        return  null;
+        PriorityQueue<Arc<Airport,Flight>> pq = new PriorityQueue<>(cmp);
+        curr.setVisited(true);
 
+        if (curr.equals(origin) && n==this.nodes.size()){
+            for (Node<Airport, Flight> n : origin.getAdjacents()) {
+                Arc<Airport, Flight> r = origin.getTree(n, cmp).get(0);
+                if (r.getData().departureOnDate(days)) {
+                    pq.offer(r);
+                }
+            }
+
+            if (pq.isEmpty()){
+                //No flights does match the requested departure day
+                return solution;
+            }
+            while (!pq.isEmpty()){
+                Arc<Airport,Flight> aux=pq.poll();
+                aux.setVisited(true);
+                solution.addFlight(aux,aux.getData().getPrice().doubleValue());
+                solution=world_Trip_ft(from,aux.getTarget(),solution,n-1,cmp,days);
+                solution.removeFlight();
+                aux.setVisited(false);
+            }
+            return solution
+        }
+
+        for (Arc<Airport,Flight> m: curr.getOutArcs()){
+            pq.offer(m);
+        }
+        while(!pq.isEmpty()){
+            Arc<Airport,Flight> aux=pq.poll();
+            if (!aux.isVisited()) {
+                aux.setVisited(true);
+                solution.addFlight(aux, (aux.getData().getPrice()).doubleValue());
+                if (solution.betterThanBest()) {
+                    if (!aux.getTarget().getVisited()) {
+                        solution = world_Trip_ft(from, aux.getTarget(), solution, n - 1, cmp,days);
+                    } else {
+                        solution = world_Trip_ft(from, aux.getTarget(), solution, n, cmp,days);
+                    }
+                }
+                solution.removeFlight();
+                aux.setVisited(false);
+            }
+        }
+        curr.setVisited(false);
+        return solution;
     }
-    **/
-//    private static class Solution<Flight>{
-//        private boolean solution;
-//        Deque<Flight> currentTrip;
-//        double CurrentCost;
-//        Deque<Flight> bestTrip;
-//        double bestCost;
-//
-//        Solution(){
-//            this.solution=false;
-//            this.currentTrip=0;
-//            this.bestTrip=0;
-//            this.currentTrip=new ArrayList();
-//            this.bestTrip=new ArrayList();
-//        }
-//
-//        public boolean betterThanBest(){
-//            if (!hasSolution()){
-//                return true;
-//            }
-//            return (currentTrip> bestTrip);
-//        }
-//
-//        public boolean hasSolution(){
-//            return solution;
-//        }
-//
-//        public void addFlight(Flight flight){
-//            currentTrip.push(flight);
-//        }
-//
-//        public void removeTrip(){
-//            currentTrip.pop();
-//            return;
-//        }
-//        public List<Arc<T,V>> toList(){
-//            return;
-//        }
-//    }
+    
+    private Solution<Flight> world_Trip_ft(Airport from, Airport current, Solution<Flight> solution, int n,
+                                           Comparator<Arc<Airport,Flight>>cmp, List<Day> days) {
+        
+        Node<Airport,Flight> curr=nodes.get(current);
+        Node<Airport,Flight> origin=nodes.get(from);
+        
+        if (n==0 && curr.equals(origin)){
+            solution.updateSolution();
+            return solution;
+        }
+
+        PriorityQueue<Arc<Airport,Flight>> pq = new PriorityQueue<>(cmp);
+        curr.setVisited(true);
+
+        if (curr.equals(origin) && n==this.nodes.size()){
+            for (Node<Airport, Flight> n : origin.getAdjacents()) {
+                Arc<Airport, Flight> r = origin.getTree(n, cmp).get(0);
+                if (r.getData().departureOnDate(days)) {
+                    pq.offer(r);
+                }
+            }
+            
+            if (pq.isEmpty()){
+                //No flights does match the requested departure day
+                return solution;
+            }
+            while (!pq.isEmpty()){
+                Arc<Airport,Flight> aux=pq.poll();
+                aux.setVisited(true);
+                solution.addFlight(aux,aux.getData().getFlightDuration().doubleValue());
+                solution=world_Trip_ft(from,aux.getTarget(),solution,n-1,cmp,days);
+                solution.removeFlight();
+                aux.setVisited(false);
+            }
+            return solution
+        }
+        
+        for (Arc<Airport,Flight> m: curr.getOutArcs()){
+            pq.offer(m);
+        }
+        while(!pq.isEmpty()){
+            Arc<Airport,Flight> aux=pq.poll();
+            if (!aux.isVisited()) {
+                aux.setVisited(true);
+                solution.addFlight(aux, (aux.getData().getFlightDuration()).doubleValue());
+                if (solution.betterThanBest()) {
+                    if (!aux.getTarget().getVisited()) {
+                        solution = world_Trip_ft(from, aux.getTarget(), solution, n - 1, cmp,days);
+                    } else {
+                        solution = world_Trip_ft(from, aux.getTarget(), solution, n, cmp,days);
+                    }
+                }
+                solution.removeFlight();
+                aux.setVisited(false);
+            }
+        }
+        curr.setVisited(false);
+        return solution;
+    }
+
+
+
+    private static class Solution<Flight>{
+        private boolean solution;
+        Deque<Arc<Airport, Flight>> currentTrip;
+        double currentCost;
+        Deque cost;
+        Deque<Arc<Airport, Flight>> bestTrip;
+        double bestCost;
+
+        Solution(){
+            this.solution=false;
+            this.currentCost=0;
+            this.bestCost=0;
+            this.currentTrip=new ArrayList();
+            this.bestTrip=new ArrayList();
+            this.cost=new ArrayList();
+        }
+
+        public boolean betterThanBest(){
+            if (!hasSolution()){
+                return true;
+            }
+            return (currentCost> bestCost);
+        }
+
+        public boolean hasSolution(){
+            return solution;
+        }
+
+        public void addFlight(Arc<Airport,Flight> flight, double cost){
+            this.cost.push(cost);
+            currentCost=currentCost+cost;
+            currentTrip.push(flight);
+        }
+
+        public void removeFlight(){
+            currentCost=currentCost-cost.pop();
+            currentTrip.pop();
+            return;
+        }
+
+        public void updateSolution(){
+            if (betterThanBest()){
+                bestCost=currentCost;
+                bestTrip=currentTrip;
+            }
+            return;
+        }
+
+        public List<Arc<Airport,Flight>> toList(){
+            Deque<Arc<Airport,Flight>> aux=new ArrayList<>();
+            while(!bestTrip.isEmpty()){
+                aux.push(bestTrip.pop());
+            }
+            List<Arc<Airport,Flight>> solutionTrip=new LinkedList<>();
+
+            while(!aux.isEmpty()){
+                Arc<Airport,Flight> ArcAux=aux.pop();
+                bestTrip.push(ArcAux);
+                solutionTrip.add(ArcAux);
+            }
+            return solutionTrip;
+        }
+    }
 
 }
