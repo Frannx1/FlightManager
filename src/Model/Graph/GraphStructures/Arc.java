@@ -5,6 +5,7 @@ public class Arc<T,V> {
     private Node<T,V> origin;
     private Node<T,V> target;
     private V data;
+    private boolean visited;
 
     public Arc(V data, Node<T,V> origin, Node<T,V> target) {
         this.origin = origin;
@@ -24,6 +25,14 @@ public class Arc<T,V> {
 
     public V getData() {
         return data;
+    }
+    
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean op){
+        this.visited=op;
     }
 
     @Override
