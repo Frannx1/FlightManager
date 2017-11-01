@@ -138,6 +138,12 @@ public class  Graph<T,V> {
 
         }
     }
+    
+    protected void clearArcMarks(){
+        for (Arc<T,V> a:arcs.values()){
+            a.setVisited(false);
+        }
+    }
 
     protected class PQNode<T,V> implements Comparable<PQNode>{
 
