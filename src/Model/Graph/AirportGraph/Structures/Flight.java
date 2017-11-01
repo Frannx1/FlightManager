@@ -67,6 +67,10 @@ public class Flight {
         return Day.closestTime(tagCurrentTime, day, departureTime);
     }
 
+    public Day getDay(){
+        return day;
+    }
+
     public int arrivalTime(int currentTime){
         return Day.arrivalTime(currentTime, day, departureTime, flightDuration);
     }

@@ -53,12 +53,12 @@ public class FileManager {
                     AirportWriter.write(air.airport.getName() + "#" + air.airport.getLatitude() + "#" + air.airport.getLongitude() + newLine);
                 }
                 AirportWriter.close();
-                if(!airport.getFlights().values().isEmpty()) {
+                if(!airport.getFlights().isEmpty()) {
                     File flightFile = new File(path,outputFileFlights);
                     FileWriter flightWriter = new FileWriter(flightFile, true);
                     airport = AirportManager.;
-                    for(Flight fl : airport.getFlights().values()){
-                        flightWriter.write(fl.getAirline() + "#" + fl.getFlightNumber() + "#" + Day.getDays(fl.getDays()) + "#" + fl.getOrigin() + "#" + fl.getTarget() + "#" + getDepartureTimeFormat(fl.getDepartureTime()) + "#" + getFlightTimeFormat(fl.getFlightTime()) + "#" + fl.getPrice() + newLine);
+                    for(Flight fl : airport.getFlights()){
+                        flightWriter.write(fl.getAirline() + "#" + fl.getFlightNumber() + "#" + Day.getDays(fl.getDay()) + "#" + fl.getOrigin() + "#" + fl.getTarget() + "#" + getDepartureTimeFormat(fl.getDepartureTime()) + "#" + getFlightTimeFormat(fl.getFlightDuration()) + "#" + fl.getPrice() + newLine);
                     }
                     flightWriter.close();
                 } else {
@@ -184,8 +184,8 @@ public class FileManager {
                     System.out.println("<name>" + fl.getData().getAirline() + "#" + fl.getData().getFlightNumber() + "</name>");
                     System.out.println("<LineString>");
                     System.out.println("<tessellate>0</tessellate>");
-                    System.out.println("<coordinates>" + airport.getAirports().get(route.get(0).getOrigin()).airport.getLatitude() + ", " + airport.getAirports().get(route.get(0).getOrigin()).airport.getLongitude() + ",0");
-                    System.out.println(airport.getAirports().get(fl.getTarget()).airport.getLatitude() + ", " + airport.getAirports().get(fl.getTarget()).airport.getLongitude() + ",0" + "</coordinates>");
+                    System.out.println("<coordinates>" + route.get(0).getOrigin().getElement().getLocation().getLatitude() + ", " + route.get(0).getOrigin().getElement().getLocation().getLongitude() + ",0");
+                    System.out.println(fl.getTarget().getElement().getLocation().getLatitude() + ", " + fl.getTarget().getElement().getLocation().getLongitude() + ",0" + "</coordinates>");
                     System.out.println("</LineString>");
                     System.out.println("</Placemark>");
 
@@ -193,7 +193,7 @@ public class FileManager {
                     System.out.println("<name>" + fl.getTarget() + "</name>");
                     System.out.println("<Point>");
                     System.out.println("<Description></Description>");
-                    System.out.println("<coordinates>" + airport.getAirports().get(fl.getTarget()).airport.getLatitude() + ", " + airport.getAirports().get(fl.getTarget()).airport.getLongitude() + ",0" + "</coordinates>");
+                    System.out.println("<coordinates>" + fl.getTarget().getElement().getLocation().getLatitude() + ", " + fl.getTarget().getElement().getLocation().getLongitude() + ",0" + "</coordinates>");
                     System.out.println("</Point>");
                     System.out.println("</Placemark>");
                 }
@@ -213,20 +213,20 @@ public class FileManager {
                     writer.write("<description>" + "Precio: " + price + " TiempoVuelo: " + hoursFlight + "h" + minutesFlight + "m" + " TiempoTotal: " + totalHours + "h" + totalMins + "m" + "</description>" + newLine);
 
                     writer.write("<Placemark>" + newLine);
-                    writer.write("<name>" + airport.getAirports().get(route.get(0).getOrigin()).airport.getName() + "</name>" + newLine);
+                    writer.write("<name>" + route.get(0).getOrigin().getElement().getName() + "</name>" + newLine);
                     writer.write("<Point>" + newLine);
                     writer.write("<Description></Description>" + newLine);
-                    writer.write("<coordinates>" + airport.getAirports().get(route.get(0).getOrigin()).airport.getLatitude() + ", " + AirportManager.getInstance().getAirports().get(route.get(0).getOrigin()).airport.getLongitude() + ",0" + "</coordinates>" + newLine);
+                    writer.write("<coordinates>" + route.get(0).getOrigin().getElement().getLocation().getLatitude() + ", " + route.get(0).getOrigin().getElement().getLocation().getLongitude() + ",0" + "</coordinates>" + newLine);
                     writer.write("</Point>" + newLine);
                     writer.write("</Placemark>" + newLine);
-                    for(Flight fl : route) {
+                    for(Arc<Airport,Flight> fl : route) {
 
                         writer.write("<Placemark>" + newLine);
-                        writer.write("<name>" + fl.getAirline() + "#" + fl.getFlightNumber() + "</name>" + newLine);
+                        writer.write("<name>" + fl.getData().getAirline() + "#" + fl.getData().getFlightNumber() + "</name>" + newLine);
                         writer.write("<LineString>" + newLine);
                         writer.write("<tessellate>0</tessellate>" + newLine);
-                        writer.write("<coordinates>" +  airport.getAirports().get(fl.getOrigin()).airport.getLatitude() + ", " + airport.getAirports().get(fl.getOrigin()).airport.getLongitude() + ",0" + newLine);
-                        writer.write(airport.getAirports().get(fl.getTarget()).airport.getLatitude() + ", " + airport.getAirports().get(fl.getTarget()).airport.getLongitude() + ",0" + "</coordinates>" + newLine);
+                        writer.write("<coordinates>" +  fl.getOrigin().getElement().getLocation().getLatitude() + ", " + fl.getOrigin().getElement().getLocation().getLatitude() + ",0" + newLine);
+                        writer.write(fl.getTarget().getElement().getLocation().getLatitude() + ", " + fl.getTarget().getElement().getLocation().getLatitude() + ",0" + "</coordinates>" + newLine);
                         writer.write("</LineString>" + newLine);
                         writer.write("</Placemark>" + newLine);
 
@@ -234,7 +234,7 @@ public class FileManager {
                         writer.write("<name>" + fl.getTarget() + "</name>" + newLine);
                         writer.write("<Point>" + newLine);
                         writer.write("<Description></Description>" + newLine);
-                        writer.write("<coordinates>" + airport.getAirports().get(fl.getTarget()).airport.getLatitude() + ", " + airport.getAirports().get(fl.getTarget()).airport.getLongitude() + ",0" + "</coordinates>" + newLine);
+                        writer.write("<coordinates>" + fl.getTarget().getElement().getLocation().getLatitude() + ", " + fl.getTarget().getElement().getLocation().getLongitude() + ",0" + "</coordinates>" + newLine);
                         writer.write("</Point>" + newLine);
                         writer.write("</Placemark>" + newLine);
                     }
