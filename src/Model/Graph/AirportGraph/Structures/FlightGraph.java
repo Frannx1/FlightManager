@@ -187,7 +187,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
                 solution=world_Trip_pr(from,from,solution,this.nodes.size(),new World_tripComparator(cmp),days);
                 break;
             case("tt"):
-                solution=world_Trip_pr(from,from,solution,this.nodes.size(),new World_tripComparator(cmp),days);
+                solution=world_Trip_tt(from,from,solution,this.nodes.size(),new World_tripComparator(cmp),days);
                 break;
 
         }
