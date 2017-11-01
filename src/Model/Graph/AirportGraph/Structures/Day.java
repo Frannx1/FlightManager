@@ -145,10 +145,14 @@ public class Day {
 
     public static int closestTime(int currentTime, Day day, Integer departureTime) {
         int difference = (Day.getIndex(day) * DAY_MIN + departureTime) - (currentTime % WEEK_MIN);
-        if(difference >= 0) {
+        if(difference > 0) {
             return difference;
         }
         return difference + WEEK_MIN;
+    }
+
+    public int hashCode(){
+        return index * 47 + 1;
     }
 }
 

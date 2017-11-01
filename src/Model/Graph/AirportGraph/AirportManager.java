@@ -6,6 +6,7 @@ import Model.Graph.AirportGraph.Structures.*;
 import Model.Graph.GraphStructures.Arc;
 import Model.Graph.GraphStructures.ArcInterface;
 import Model.Graph.GraphStructures.Graph;
+import Model.Graph.GraphStructures.Node;
 
 import java.util.*;
 
@@ -30,12 +31,6 @@ public class AirportManager {
         }
     };
 
-    private Comparator<Arc<Airport, Flight>> cmpTotalFlightTime = new Comparator<Arc<Airport, Flight>>() {
-        @Override
-        public int compare(Arc<Airport, Flight> o1, Arc<Airport, Flight> o2) {
-            return o1.getData().arrivalTime(0) - o2.getData().arrivalTime(0);
-        }
-    };
 
     ArcInterface<Arc<Airport,Flight>> arcIntDuration = new ArcInterface<Arc<Airport,Flight>>(){
         public double convert(Arc<Airport,Flight> arc ){
@@ -54,7 +49,6 @@ public class AirportManager {
         comparators = new ArrayList<>();
         comparators.add(cmpFlightDuration);
         comparators.add(cmpPrecio);
-        comparators.add(cmpTotalFlightTime);
 
         interfaces = new ArrayList<>();
         interfaces.add(arcIntDuration);
@@ -79,10 +73,13 @@ public class AirportManager {
                           int departureTime, int flightDuration, double price) {
         try {
             for (Day day: Day.getDays(days)) {
+
                 Flight flight = new Flight(airline, flightNumber, day, departureTime, flightDuration, price);
                 airportMap.addArc(flight, airportMap.getNodeElement(new Airport(origin)),
                         airportMap.getNodeElement(new Airport(target)));
             }
+
+
 
         } catch (IllegalFormatException e) {
             e.printStackTrace();
@@ -112,7 +109,7 @@ public class AirportManager {
         int index = priority.getValue();
         if(priority == FlightPriority.TOTAL_TIME) {
             return airportMap.minTotalTimePath(airportMap.getNodeElement(new Airport(origin)),
-                    airportMap.getNodeElement(new Airport(dest)), comparators.get(index), departureDays);
+                    airportMap.getNodeElement(new Airport(dest)), comparators.get(0), departureDays);
         }
         else {
             return airportMap.minPath(airportMap.getNodeElement(new Airport(origin)),
@@ -139,6 +136,8 @@ public class AirportManager {
         tu[0] = "Ma";
         tu[1]  = "Lu";
 
+        a.addFlight("san", "6",tu,"ARG","PAR",10*60,1*60,700 );
+
         a.addFlight("san", "1",days,"ARG","BRA",7*60,7*60,400 );
 
         a.addFlight("san", "2",days,"ARG","URU",9*60,2*60,900 );
@@ -148,8 +147,6 @@ public class AirportManager {
         a.addFlight("san", "4",days,"BRA","URU",14*60,1*60,100 );
 
         a.addFlight("san", "5",days,"ARG","CHI",20*60,13*60,1500 );
-
-        a.addFlight("san", "6",tu,"ARG","PAR",10*60,1*60,700 );
 
         a.addFlight("san", "7",days,"PAR","CHI",13*60,3*60,300 );
 
@@ -161,8 +158,8 @@ public class AirportManager {
 
         a.addFlight("san", "10",tu,"PAR","BRA",11*60,2*60,100 );
 
-        Airport from = new Airport("ARG",new Location(0,0));
-        Airport to = new Airport("BRA",new Location(3,0));
+        Airport from = new Airport("ARG");
+        Airport to = new Airport("CHI");
         ArcInterface<Arc<Airport,Flight>> arcint = new ArcInterface<Arc<Airport,Flight>>(){
             public double convert(Arc<Airport,Flight> arc ){
                 return (double)arc.getData().getFlightDuration();
@@ -175,6 +172,7 @@ public class AirportManager {
 
         List<Arc<Airport,Flight>> route = a.airportMap.minTotalTimePath(from, to ,a.cmpFlightDuration, ldays);
 
+        //List<Arc<Airport,Flight>> route = a.findRoute("ARG", "CHI", FlightPriority.TOTAL_TIME, ldays);
         for(Arc<Airport,Flight> r : route){
             System.out.println("Origin: "+ r.getOrigin() + " dest: "+ r.getTarget() + " "+ r.getData());
         }

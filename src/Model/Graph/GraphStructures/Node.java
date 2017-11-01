@@ -1,12 +1,14 @@
 package Model.Graph.GraphStructures;
 
 
+import Model.SortedList;
+
 import java.util.*;
 
 public class Node<T,V> {
 
     private T element;
-    private Map<Node<T,V>, List<TreeSet<Arc<T,V>>>> outArcsMap;
+    private Map<Node<T,V>, List<SortedList<Arc<T,V>>>> outArcsMap;
     private List<Arc<T,V>> outArcsList;
     private List<Arc<T,V>> inArcs;
     private List<Comparator<Arc<T,V>>> comparators;
@@ -54,24 +56,26 @@ public class Node<T,V> {
     public void addOutArc(Arc<T,V> arc) {
         outArcsList.add(arc);
         if(!outArcsMap.containsKey(arc.getTarget())) {
-            List<TreeSet<Arc<T,V>>> list = new ArrayList<>();
+            List<SortedList<Arc<T,V>>> list = new ArrayList<>();
             outArcsMap.put(arc.getTarget(), list);
 
             for (Comparator<Arc<T,V>> cmp: comparators) {
-                list.add(new TreeSet<Arc<T, V>>(cmp));
+                list.add(new SortedList<>(cmp));
             }
         }
-        List<TreeSet<Arc<T,V>>> nodeArcs = outArcsMap.get(arc.getTarget());
-        for (TreeSet<Arc<T,V>> set: nodeArcs) {
+        List<SortedList<Arc<T,V>>> nodeArcs = outArcsMap.get(arc.getTarget());
+
+        for (SortedList<Arc<T,V>> set: nodeArcs) {
             set.add(arc);
+
         }
     }
 
     public void removeOutArc(Arc<T,V> arc) {
         outArcsList.remove(arc);
         if(outArcsMap.containsKey(arc.getTarget())) {
-            List<TreeSet<Arc<T,V>>> nodeArcs = outArcsMap.get(arc.getTarget());
-            for (TreeSet<Arc<T,V>> set: nodeArcs) {
+            List<SortedList<Arc<T,V>>> nodeArcs = outArcsMap.get(arc.getTarget());
+            for (SortedList<Arc<T,V>> set: nodeArcs) {
                 set.remove(arc);
             }
             if(outArcsMap.get(arc.getTarget()).get(0).isEmpty()) {
@@ -80,7 +84,7 @@ public class Node<T,V> {
         }
     }
 
-    public TreeSet<Arc<T,V>> getTree(Node<T,V> node, Comparator<Arc<T,V>> cmp) {
+    public SortedList<Arc<T,V>> getTree(Node<T,V> node, Comparator<Arc<T,V>> cmp) {
         return outArcsMap.get(node).get(comparators.indexOf(cmp));
     }
 

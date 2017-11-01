@@ -73,7 +73,7 @@ public class Flight {
 
     public String toString(){
 
-        String s = String.format("FLIGHT DETAILS:[ NUMBER: %s  DEPARTURE: %s AT %d:%d  DURATION: %d:%d AIRLINE: %s ]",flightNumber,day.toString() , departureTime/60,departureTime%60, flightDuration/60, flightDuration%60,airline  );
+        String s = String.format("FLIGHT DETAILS:[ NUMBER: %s  DEPARTURE: %s AT %d:%d  hs  DURATION: %d:%d hs AIRLINE: %s ]",flightNumber,day.toString() , departureTime/60,departureTime%60, flightDuration/60, flightDuration%60,airline  );
         return s;
     }
 
@@ -86,7 +86,7 @@ public class Flight {
             return false;
         }
         Flight aux = (Flight) obj;
-        return this.airline.equals(aux.getAirline()) && this.flightNumber.equals(aux.getFlightNumber());
+        return this.airline.equals(aux.getAirline()) && this.flightNumber.equals(aux.getFlightNumber()) &&  (getDayIndex() == aux.getDayIndex());
     }
 
     @Override
