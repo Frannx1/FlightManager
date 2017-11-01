@@ -381,6 +381,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
 
         public void updateSolution(){
             if (betterThanBest()){
+                this.solution=true;
                 bestCost=currentCost;
                 bestTrip=currentTrip;
             }
