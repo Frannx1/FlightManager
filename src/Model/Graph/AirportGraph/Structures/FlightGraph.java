@@ -247,7 +247,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
                 Arc<Airport,Flight> aux=pq.poll();
                 aux.setVisited(true);
                 solution.addFlight(aux,aux.getData().getPrice().doubleValue());
-                solution=world_Trip_ft(from,aux.getTarget(),solution,n-1,cmp,days);
+                solution=world_Trip_pr(from,aux.getTarget(),solution,n-1,cmp,days);
                 solution.removeFlight();
                 aux.setVisited(false);
             }
@@ -264,9 +264,9 @@ public class FlightGraph extends Graph<Airport, Flight> {
                 solution.addFlight(aux, (aux.getData().getPrice()).doubleValue());
                 if (solution.betterThanBest()) {
                     if (!aux.getTarget().getVisited()) {
-                        solution = world_Trip_ft(from, aux.getTarget(), solution, n - 1, cmp,days);
+                        solution = world_Trip_pr(from, aux.getTarget(), solution, n - 1, cmp,days);
                     } else {
-                        solution = world_Trip_ft(from, aux.getTarget(), solution, n, cmp,days);
+                        solution = world_Trip_pr(from, aux.getTarget(), solution, n, cmp,days);
                     }
                 }
                 solution.removeFlight();
