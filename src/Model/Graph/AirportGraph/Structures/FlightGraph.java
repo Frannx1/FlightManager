@@ -169,6 +169,26 @@ public class FlightGraph extends Graph<Airport, Flight> {
      * <p>
      * Armando busqueda de ciclos Hamiltoniano
      **/
+        private Comparator<Arc<Airport,Flight>> cmp;
+        World_tripComparator(Comparator<Arc<Airport,Flight>>cmp){
+            this.cmp=cmp;
+        }
+
+        @Override
+        public int compare(Arc<Airport, Flight> o1, Arc<Airport, Flight> o2) {
+            int cmp1= (o1.getTarget().getVisited())?1:0;
+            int cmp2=(o2.getTarget().getVisited())?1:0;
+            if (cmp1>cmp2){
+                return 1;
+            }
+            if (cmp1<cmp2){
+                return -1;
+            }
+            if (cmp1==cmp2){
+                return this.cmp.compare(o1,o2);
+            }
+        }
+    }
     public List<Arc<Airport, Flight>> world_trip(Airport from, Comparator<Arc<Airport, Flight>> cmp, List<Day> days,String case) {
         if (from == null ) {
             throw new IllegalArgumentException("Bad input.");
