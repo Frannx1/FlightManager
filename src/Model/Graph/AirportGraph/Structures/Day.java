@@ -62,7 +62,8 @@ public class Day {
                     break;
                 case "Do": ans.add(Day.SUNDAY);
                     break;
-                default: throw new IllegalArgumentException();
+                default:
+                    throw new IllegalArgumentException();
             }
         }
         return ans;

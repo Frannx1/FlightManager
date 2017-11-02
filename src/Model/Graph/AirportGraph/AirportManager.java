@@ -61,6 +61,7 @@ public class AirportManager {
 
     public void addAirport(String airportName, double lat, double lng) {
         airportMap.addNode(new Airport(airportName, new Location(lat, lng)));
+
     }
 
     public void deleteAirport(String airportName) {
@@ -80,8 +81,6 @@ public class AirportManager {
                 airportMap.addArc(flight, airportMap.getNodeElement(new Airport(origin)),
                         airportMap.getNodeElement(new Airport(target)));
             }
-
-
 
         } catch (IllegalFormatException e) {
             e.printStackTrace();
@@ -177,6 +176,7 @@ public class AirportManager {
 
 
         List<Arc<Airport,Flight>> route = a.findRoute("ARG", "CHI", FlightPriority.TOTAL_TIME, ldays);
+
 
         FileManager fm = new FileManager("./", a);
 

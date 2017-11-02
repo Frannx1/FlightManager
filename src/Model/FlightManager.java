@@ -4,6 +4,7 @@ import Model.FileTools.FileManager;
 import Model.Graph.AirportGraph.AirportManager;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class FlightManager {
@@ -26,9 +27,9 @@ public class FlightManager {
     }
 
     public static void main(String[] args) throws ClassNotFoundException, IOException {
-
+        //System.out.println(Paths.get(".").toAbsolutePath().normalize().toString());
         AirportManager airportManager = new AirportManager();
-        FileManager fileManager = new FileManager("desktop", airportManager);
+        FileManager fileManager = new FileManager(Paths.get(".").toAbsolutePath().normalize().toString()+"/src/Data", airportManager);
         Parser parser = new Parser(airportManager, AIRPORT_FILE, FLIGHT_FILE, fileManager);
         if(args.length != 0){
             if(parser.parseArguments(args) == false) {

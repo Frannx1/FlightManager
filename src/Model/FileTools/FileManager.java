@@ -253,7 +253,6 @@ public class FileManager {
         return true;
     }
 
-    //findRoute src=BUE dst=CHI priority=ft weekdays=Lu
 
     public  void readFlights(String file) throws FileNotFoundException {
         File toRead = new File(path,file);
@@ -267,8 +266,8 @@ public class FileManager {
                     System.out.println("formato no valido en la linea "+i);
                 } else {
                     String[] res =  s.split("#");
-                    String [] days = new String[] {res[2]};
-                    airport.addFlight(res[0], res[1], days, res[3], res[4], new Integer(res[5]), new Integer(res[6]), new Double(res[7]));
+                    String [] days = res[2].split("-");
+                    airport.addFlight(res[0], res[1], days, res[3], res[4], getFlightDuration(res[5].split(":")), getFlightDuration(res[6].split("[hm]")), new Double(res[7]));
                 }
                 i++;
 
@@ -298,5 +297,10 @@ public class FileManager {
         } catch (IOException e) {
             System.out.println("NotFound");
         }
+    }
+
+    public int getFlightDuration(String[] hours){
+
+        return  Integer.valueOf(hours[0])*60 + Integer.valueOf(hours[1]);
     }
 }

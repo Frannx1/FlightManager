@@ -59,7 +59,7 @@ public class Parser {
         String findRouteExpReg = "findRoute src=[a-z A-Z]{3} dst=[a-z A-Z]{3} priority=(pr|tt|ft)( weekdays=(Lu|Ma|Mi|Ju|Vi|Sa|Do)(-(Lu|Ma|Mi|Ju|Vi|Sa|Do))*)?$";
         String fileFormatExpReg = "fileFormat ((text)|(KML))";
         String outputExpReg = "output stdout";
-        String outputFileExpReg = "output file [a-z A-Z 0-9]+(\\.txt|\\.kml)";
+        String outputFileExpReg = "output file [a-z A-Z 0-9]";
         String exitSaveExpReg = "exit&save";
         String loadExpReg = "load";
         String quitExpReg = "quit";
