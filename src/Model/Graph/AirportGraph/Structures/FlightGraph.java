@@ -356,7 +356,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
               Arc<Airport, Flight> r = origin.getTree(n, cmp).get(0);
               if (r.getData().departureOnDate(days)) {
                   pq.offer(r);
-                  r.getData().setTagCurrentTime()=r.getData().arrivalTime(0);
+                  r.getData().setTagCurrentTime(r.getData().arrivalTime(0));
 
               }
           }
@@ -384,6 +384,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
           if (!aux.isVisited()) {
               aux.setVisited(true);
               int ArrivalTime=aux.getData().arrivalTime(solution.peekArc().getData().getTagCurrentTime());
+              aux.getData().setTagCurrentTime(ArrivalTime);
               solution.addFlight(aux, (double)ArrivalTime);
               if (solution.betterThanBest()) {
                   if (!aux.getTarget().getVisited()) {
