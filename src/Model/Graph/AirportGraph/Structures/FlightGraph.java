@@ -336,7 +336,67 @@ public class FlightGraph extends Graph<Airport, Flight> {
 //        curr.setVisited(false);
 //        return solution;
 //    }
+//  private Solution<Flight> world_Trip_tt(Airport from, Airport current, Solution<Flight> solution, int n,
+//                                           Comparator<Arc<Airport,Flight>>cmp, List<Day> days) {
+//    
+//    Node<Airport,Flight> curr=nodes.get(current);
 //
+//    
+//        Node<Airport,Flight> origin=nodes.get(from);
+//        PriorityQueue<Arc<Airport,Flight>> pq = new PriorityQueue<>(cmp);
+//
+//        if (n==0 && curr.equals(origin)){
+//            solution.updateSolution();
+//            return solution;
+//        }
+
+//        curr.setVisited(true);
+
+//        if (curr.equals(origin) && n==this.nodes.size()){
+//            for (Node<Airport, Flight> n : origin.getAdjacents()) {
+//                Arc<Airport, Flight> r = origin.getTree(n, cmp).get(0);
+//                if (r.getData().departureOnDate(days)) {
+//                    pq.offer(r);
+//                    r.getData().setTagCurrentTime(r.getData().arrivalTime(0));
+//                }
+//          }
+//
+//            if (pq.isEmpty()){
+                //No flights does match the requested departure day
+//                return solution;
+//            }
+//            while (!pq.isEmpty()){
+//                Arc<Airport,Flight> aux=pq.poll();
+//               aux.setVisited(true);
+//                solution.addFlight(aux,aux.getData().getFlightDuration().doubleValue());
+//                solution=world_Trip_tt(from,aux.getTarget(),solution,n-1,cmp,days);
+//                solution.removeFlight();
+//                aux.setVisited(false);
+//            }
+//            return solution
+//        }
+
+//        for (Arc<Airport,Flight> m: curr.getOutArcs()){
+//            pq.offer(m);
+//       }
+//        while(!pq.isEmpty()){
+//            Arc<Airport,Flight> aux=pq.poll();
+//            if (!aux.isVisited()) {
+//                aux.setVisited(true);
+//                solution.addFlight(aux,time);
+//                if (solution.betterThanBest()) {
+//                    if (!aux.getTarget().getVisited()) {
+//                        solution = world_Trip_tt(from, aux.getTarget(), solution, n - 1, cmp,days);
+//                    } else {
+//                        solution = world_Trip_tt(from, aux.getTarget(), solution, n, cmp,days);
+//                   }
+//                }
+//                solution.removeFlight();
+//                aux.setVisited(false);
+//            }
+//        }
+//        curr.setVisited(false);
+//        return solution;
 //
 //
 //    private static class Solution<Flight>{
