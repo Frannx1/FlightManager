@@ -164,6 +164,25 @@ public class FlightGraph extends Graph<Airport, Flight> {
         }
     }
 
+    public static class World_tripComparator implements Comparator<Arc<Airport,Flight>>{
+        private Comparator<Arc<Airport,Flight>> arcComparator;
+        World_tripComparator(Comparator<Arc<Airport,Flight>>cmp){
+            this.arcComparator=cmp;
+        }
+
+        @Override
+        public int compare(Arc<Airport, Flight> o1, Arc<Airport, Flight> o2) {
+            int cmp1= (o1.getTarget().getVisited())?1:0;
+            int cmp2=(o2.getTarget().getVisited())?1:0;
+            if (cmp1>cmp2) return 1;
+            if (cmp1<cmp2){
+                return -1;
+            }
+            return this.arcComparator.compare(o1,o2);
+
+        }
+    }
+
 /**
      *
      * @param from Is the Airport you want to take your World_Trip
