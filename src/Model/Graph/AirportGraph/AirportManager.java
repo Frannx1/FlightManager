@@ -186,18 +186,12 @@ public class AirportManager {
         ldays.add(Day.getDay(0));
         ldays.add(Day.getDay(1));
 
-
-        List<Arc<Airport,Flight>> route = a.findRoute("ARG", "CHI", FlightPriority.TOTAL_TIME, ldays);
-
-
+        //List<Arc<Airport,Flight>> route = a.findRoute("ARG", "CHI", FlightPriority.TOTAL_TIME, ldays);
         FileManager fm = new FileManager("./", a);
 
-        fm.writeRoute(route,"stdout", FileFormat.TEXT);
-
-
-
-
-
-    }
+        //fm.writeRoute(route,"stdout", FileFormat.TEXT);
+        fm.writeRoute(WorldTrip,"stdout",FileFormat.TEXT);
+        fileManager fm = new FileManager("./", a);
+   }
 
 }
