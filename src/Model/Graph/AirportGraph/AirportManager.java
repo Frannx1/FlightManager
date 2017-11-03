@@ -118,6 +118,18 @@ public class AirportManager {
                     departureDays);
         }
     }
+    public List<Arc<Airport, Flight>> world_trip(String origin, FlightPriority priority, List<Day> departureDays) {
+        int index = priority.getValue();
+        if (priority==FlightPriority.TOTAL_TIME) {
+            return airportMap.world_trip(airportMap.getNodeElement(new Airport(origin)), comparators.get(0),
+                    departureDays, priority);
+        }else if (priority==FlightPriority.TIME){
+            return airportMap.world_trip(airportMap.getNodeElement(new Airport(origin)), comparators.get(index),
+                departureDays, priority);
+        }
+        return airportMap.world_trip(airportMap.getNodeElement(new Airport(origin)), comparators.get(index),
+               departureDays, priority);
+    }
 
     public Collection<Arc<Airport,Flight>> getAirportArcs(){
         return this.airportMap.getArcs();
