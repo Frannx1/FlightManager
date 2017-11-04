@@ -169,7 +169,11 @@ public class FlightGraph extends Graph<Airport, Flight> {
         World_tripComparator(Comparator<Arc<Airport,Flight>>cmp){
             this.arcComparator=cmp;
         }
-
+        
+        private Comparator<Arc<Airport,Flight>> getComparator(){
+            return this.arcComparator;
+        }   
+        
         @Override
         public int compare(Arc<Airport, Flight> o1, Arc<Airport, Flight> o2) {
             int cmp1= (o1.getTarget().getVisited())?1:0;
@@ -233,7 +237,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
 
         if (curr.equals(origin) && n==this.nodes.size()){
             for (Node<Airport, Flight> t : origin.getAdjacents()) {
-                Arc<Airport, Flight> r = origin.getTree(t, cmp).get(0);
+                Arc<Airport, Flight> r = origin.getTree(t, cmp.getComparator()).get(0);
                 if (r.getData().departureOnDate(days)) {
                     pq.offer(r);
                 }
@@ -293,7 +297,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
 
         if (curr.equals(origin) && n==this.nodes.size()){
             for (Node<Airport, Flight> t : origin.getAdjacents()) {
-                Arc<Airport, Flight> r = origin.getTree(t, cmp).get(0);
+                Arc<Airport, Flight> r = origin.getTree(t, cmp.getComparator()).get(0);
                 if (r.getData().departureOnDate(days)) {
                     pq.offer(r);
                 }
@@ -349,7 +353,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
 
         if (curr.equals(origin) && n == this.nodes.size()) {
             for (Node<Airport, Flight> t : origin.getAdjacents()) {
-                Arc<Airport, Flight> r = origin.getTree(t, cmp).get(0);
+                Arc<Airport, Flight> r = origin.getTree(t, cmp.getComparator()).get(0);
                 if (r.getData().departureOnDate(days)) {
                     pq.offer(r);
                     r.getData().setTagCurrentTime(r.getData().arrivalTime(0));
