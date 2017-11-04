@@ -114,6 +114,10 @@ public class FileManager {
         int totalTime = 0;
         int initialTime = route.get(0).getData().getDepartureTime()+route.get(0).getData().getDayIndex()*(60*24);
         int arrivalTime = initialTime;
+        if (route.size()==0){
+            System.out.println("NotFound");
+            return true;
+        }
         for(Arc<Airport,Flight> fl: route){
             int aux ;
             if(fl.getData().getDepartureTime()+fl.getData().getDayIndex()*(60*24) >= (arrivalTime%(60*7*24))){
