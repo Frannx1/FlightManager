@@ -107,7 +107,10 @@ public class FileManager {
     }
 
     public boolean writeRoute(List<Arc<Airport,Flight>> route, String output, FileFormat outputFormat){
-        if(route == null) return false;
+        if(route == null) {
+            System.out.println("No route");
+            return false;
+        }
         String newLine = System.getProperty("line.separator");
         double price = 0.0;
         int flightTime = 0;

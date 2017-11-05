@@ -1,5 +1,6 @@
 package Model.Graph.AirportGraph.Structures;
 
+import Model.FlightPriority;
 import Model.Graph.GraphStructures.Arc;
 import Model.Graph.GraphStructures.ArcInterface;
 import Model.Graph.GraphStructures.Graph;
@@ -207,13 +208,13 @@ public class FlightGraph extends Graph<Airport, Flight> {
         clearArcMarks();
         Solution solution=new Solution();
         if (priority==FlightPriority.TIME){
-            solution=world_Trip_ft(from,from,solution,this.nodes.size(),new World_tripComparator(cmp),days);
+            solution=world_Trip_ft(from,from,solution,this.nodes.size(), cmp,days);
         }
         if (priority==FlightPriority.PRICE) {
-            solution=world_Trip_pr(from,from,solution,this.nodes.size(),new World_tripComparator(cmp),days);
+            solution=world_Trip_pr(from,from,solution,this.nodes.size(),cmp,days);
         }
         if (priority==FlightPriority.TOTAL_TIME){
-            solution=world_Trip_tt(from,from,solution,this.nodes.size(),new World_tripComparator(cmp),days);
+            solution=world_Trip_tt(from,from,solution,this.nodes.size(),cmp,days);
         }
         if (solution.hasSolution()) {
             return solution.toList();
@@ -237,7 +238,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
 
         if (curr.equals(origin) && n==this.nodes.size()){
             for (Node<Airport, Flight> t : origin.getAdjacents()) {
-                Arc<Airport, Flight> r = origin.getTree(t, cmp.getComparator()).get(0);
+                Arc<Airport, Flight> r = origin.getTree(t, cmp).get(0);
                 if (r.getData().departureOnDate(days)) {
                     pq.offer(r);
                 }
@@ -297,7 +298,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
 
         if (curr.equals(origin) && n==this.nodes.size()){
             for (Node<Airport, Flight> t : origin.getAdjacents()) {
-                Arc<Airport, Flight> r = origin.getTree(t, cmp.getComparator()).get(0);
+                Arc<Airport, Flight> r = origin.getTree(t, cmp).get(0);
                 if (r.getData().departureOnDate(days)) {
                     pq.offer(r);
                 }
@@ -353,7 +354,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
 
         if (curr.equals(origin) && n == this.nodes.size()) {
             for (Node<Airport, Flight> t : origin.getAdjacents()) {
-                Arc<Airport, Flight> r = origin.getTree(t, cmp.getComparator()).get(0);
+                Arc<Airport, Flight> r = origin.getTree(t, cmp).get(0);
                 if (r.getData().departureOnDate(days)) {
                     pq.offer(r);
                     r.getData().setTagCurrentTime(r.getData().arrivalTime(0));

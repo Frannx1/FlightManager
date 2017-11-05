@@ -10,6 +10,7 @@ import Model.Graph.GraphStructures.ArcInterface;
 import Model.Graph.GraphStructures.Graph;
 import Model.Graph.GraphStructures.Node;
 
+import java.io.IOException;
 import java.util.*;
 
 
@@ -64,9 +65,7 @@ public class AirportManager {
 
     }
 
-    public void deleteAirport(String airportName) {
-        airportMap.deleteNode(new Airport(airportName));
-    }
+    public void deleteAirport(String airportName){  airportMap.deleteNode(new Airport(airportName)); }
 
     public void deleteAirports() {
         airportMap.deleteGraph();
@@ -187,11 +186,14 @@ public class AirportManager {
         ldays.add(Day.getDay(1));
 
         //List<Arc<Airport,Flight>> route = a.findRoute("ARG", "CHI", FlightPriority.TOTAL_TIME, ldays);
-        FileManager fm = new FileManager("./", a);
+        FileManager fm = new FileManager("src/test.txt", a);
 
         //fm.writeRoute(route,"stdout", FileFormat.TEXT);
-        fm.writeRoute(WorldTrip,"stdout",FileFormat.TEXT);
-        fileManager fm = new FileManager("./", a);
+        ArrayList<Day> wtdays = new ArrayList<>();
+        wtdays.add(Day.getDay(1));
+        wtdays.add(Day.getDay(2));
+        fm.writeRoute(a.world_trip("ARG", FlightPriority.PRICE, wtdays),"stdout",FileFormat.TEXT);
+        FileManager fm2 = new FileManager("src/test.txt", a);
    }
 
 }
