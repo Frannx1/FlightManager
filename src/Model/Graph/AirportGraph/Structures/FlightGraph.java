@@ -423,7 +423,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
             if (!hasSolution()){
                 return true;
             }
-            return (currentCost> bestCost);
+            return (currentCost< bestCost);
         }
 
         public boolean hasSolution(){
