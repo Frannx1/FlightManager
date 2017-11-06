@@ -11,6 +11,7 @@ public class Arc<T,V> {
         this.origin = origin;
         this.target = target;
         this.data = data;
+        this.visited=false;
         origin.addOutArc(this);
         target.addInArc(this);
     }
