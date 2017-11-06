@@ -208,13 +208,13 @@ public class FlightGraph extends Graph<Airport, Flight> {
         clearArcMarks();
         Solution solution=new Solution();
         if (priority==FlightPriority.TIME){
-            solution=world_Trip_ft(from,from,solution,this.nodes.size()-1, cmp,days);
+            solution=world_Trip_ft(from,from,solution,this.nodes.size(), cmp,days);
         }
         if (priority==FlightPriority.PRICE) {
-            solution=world_Trip_pr(from,from,solution,this.nodes.size()-1,cmp,days);
+            solution=world_Trip_pr(from,from,solution,this.nodes.size(),cmp,days);
         }
         if (priority==FlightPriority.TOTAL_TIME){
-            solution=world_Trip_tt(from,from,solution,this.nodes.size()-1,cmp,days);
+            solution=world_Trip_tt(from,from,solution,this.nodes.size(),cmp,days);
         }
         if (solution.hasSolution()) {
             return solution.toList();
@@ -236,7 +236,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
         PriorityQueue<Arc<Airport,Flight>> pq = new PriorityQueue<>(cmp);
         curr.setVisited(true);
 
-        if (curr.equals(origin) && n==this.nodes.size()-1){
+        if (curr.equals(origin) && n==this.nodes.size()){
             for (Node<Airport, Flight> t : origin.getAdjacents()) {
                 Arc<Airport, Flight> r = origin.getTree(t, cmp).get(0);
                 if (r.getData().departureOnDate(days)) {
@@ -252,7 +252,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
                 Arc<Airport,Flight> aux=pq.poll();
                 aux.setVisited(true);
                 solution.addFlight(aux,aux.getData().getPrice().doubleValue());
-                solution=world_Trip_pr(from,aux.getTarget().getElement(),solution,n-1,cmp,days);
+                solution=world_Trip_pr(from,aux.getTarget().getElement(),solution,n-2,cmp,days);
                 solution.removeFlight();
                 aux.setVisited(false);
             }
@@ -296,7 +296,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
         PriorityQueue<Arc<Airport,Flight>> pq = new PriorityQueue<>(cmp);
         curr.setVisited(true);
 
-        if (curr.equals(origin) && n==this.nodes.size()-1){
+        if (curr.equals(origin) && n==this.nodes.size()){
             for (Node<Airport, Flight> t : origin.getAdjacents()) {
                 Arc<Airport, Flight> r = origin.getTree(t, cmp).get(0);
                 if (r.getData().departureOnDate(days)) {
@@ -312,7 +312,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
                 Arc<Airport,Flight> aux=pq.poll();
                 aux.setVisited(true);
                 solution.addFlight(aux,aux.getData().getFlightDuration().doubleValue());
-                solution=world_Trip_ft(from,aux.getTarget().getElement(),solution,n-1,cmp,days);
+                solution=world_Trip_ft(from,aux.getTarget().getElement(),solution,n-2,cmp,days);
                 solution.removeFlight();
                 aux.setVisited(false);
             }
@@ -352,7 +352,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
 
         curr.setVisited(true);
 
-        if (curr.equals(origin) && n == this.nodes.size()-1) {
+        if (curr.equals(origin) && n == this.nodes.size()) {
             for (Node<Airport, Flight> t : origin.getAdjacents()) {
                 Arc<Airport, Flight> r = origin.getTree(t, cmp).get(0);
                 if (r.getData().departureOnDate(days)) {
@@ -370,7 +370,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
                 Arc<Airport, Flight> aux = pq.poll();
                 aux.setVisited(true);
                 solution.addFlight(aux, aux.getData().getFlightDuration().doubleValue());
-                solution = world_Trip_tt(from, aux.getTarget().getElement(), solution, n - 1, cmp, days);
+                solution = world_Trip_tt(from, aux.getTarget().getElement(), solution, n - 2, cmp, days);
                 solution.removeFlight();
                 aux.setVisited(false);
             }
