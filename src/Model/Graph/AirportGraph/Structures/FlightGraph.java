@@ -237,10 +237,9 @@ public class FlightGraph extends Graph<Airport, Flight> {
         curr.setVisited(true);
 
         if (curr.equals(origin) && n==this.nodes.size()){
-            for (Node<Airport, Flight> t : origin.getAdjacents()) {
-                Arc<Airport, Flight> r = origin.getTree(t, cmp).get(0);
-                if (r.getData().departureOnDate(days)) {
-                    pq.offer(r);
+            for (Arc<Airport, Flight> t : curr.getOutArcs()) {
+                if (t.getData().departureOnDate(days)) {
+                    pq.offer(t);
                 }
             }
 
@@ -297,10 +296,9 @@ public class FlightGraph extends Graph<Airport, Flight> {
         curr.setVisited(true);
 
         if (curr.equals(origin) && n==this.nodes.size()){
-            for (Node<Airport, Flight> t : origin.getAdjacents()) {
-                Arc<Airport, Flight> r = origin.getTree(t, cmp).get(0);
-                if (r.getData().departureOnDate(days)) {
-                    pq.offer(r);
+            for (Arc<Airport, Flight> t : curr.getOutArcs()) {
+                if (t.getData().departureOnDate(days)) {
+                    pq.offer(t);
                 }
             }
 
@@ -353,12 +351,10 @@ public class FlightGraph extends Graph<Airport, Flight> {
         curr.setVisited(true);
 
         if (curr.equals(origin) && n == this.nodes.size()) {
-            for (Node<Airport, Flight> t : origin.getAdjacents()) {
-                Arc<Airport, Flight> r = origin.getTree(t, cmp).get(0);
-                if (r.getData().departureOnDate(days)) {
-                    pq.offer(r);
-                    r.getData().setTagCurrentTime(r.getData().arrivalTime(0));
-
+            for (Arc<Airport, Flight> t : curr.getOutArcs()) {
+                if (t.getData().departureOnDate(days)) {
+                    t.getData().setTagCurrentTime(t.getData().arrivalTime(0));
+                    pq.offer(t);                  
                 }
             }
 
