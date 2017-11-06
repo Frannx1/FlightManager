@@ -406,7 +406,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
         private boolean solution;
         private Deque<Arc<Airport, Flight>> currentTrip;
         private double currentCost;
-        private Deque cost;
+        private Deque<Double> cost;
         private Deque<Arc<Airport, Flight>> bestTrip;
         private double bestCost;
 
@@ -423,7 +423,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
             if (!hasSolution()){
                 return true;
             }
-            return (currentCost< bestCost);
+            return (currentCost < bestCost);
         }
 
         public boolean hasSolution(){
@@ -431,7 +431,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
         }
 
         public double peekCost(){
-            return (double)cost.peek();
+            return cost.peek().doubleValue();
         }
 
         public Arc<Airport, Flight> peekArc(){
@@ -439,13 +439,13 @@ public class FlightGraph extends Graph<Airport, Flight> {
         }
 
         public void addFlight(Arc<Airport,Flight> flight, double cost){
-            this.cost.push(cost);
+            this.cost.push(new Double(cost));
             currentCost=currentCost+cost;
             currentTrip.push(flight);
         }
 
         public void removeFlight(){
-            currentCost = (double)((int)currentCost - (int)cost.pop());
+            currentCost = (double)((int)currentCost - cost.pop().intValue());
             currentTrip.pop();
             return;
         }
@@ -453,8 +453,16 @@ public class FlightGraph extends Graph<Airport, Flight> {
         public void updateSolution(){
             if (betterThanBest()){
                 this.solution=true;
+                Deque<Arc<Airport,Flight>> aux=new LinkedList<>();
+                while(!currentTrip.isEmpty()){
+                    aux.push(currentTrip.pop());
+                }
+                while(!aux.isEmpty()){
+                    Arc<Airport,Flight> ArcAux=aux.pop();
+                    bestTrip.push(ArcAux);
+                    currentTrip.push(ArcAux);  
+                }
                 bestCost=currentCost;
-                bestTrip=currentTrip;
             }
             return;
         }
