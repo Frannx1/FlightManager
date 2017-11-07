@@ -305,9 +305,10 @@ public class FlightGraph extends Graph<Airport, Flight> {
         }
 
         PriorityQueue<Arc<Airport,Flight>> pq = new PriorityQueue<>(cmp);
-        curr.setVisited(true);
+        //curr.setVisited(true);
 
         if (curr.equals(origin) && n==this.nodes.size()){
+            curr.setVisited(true);
             for (Arc<Airport, Flight> t : curr.getOutArcs()) {
                 if (t.getData().departureOnDate(days)) {
                     pq.offer(t);
@@ -322,7 +323,9 @@ public class FlightGraph extends Graph<Airport, Flight> {
                 Arc<Airport,Flight> aux=pq.poll();
                 aux.setVisited(true);
                 solution.addFlight(aux,aux.getData().getFlightDuration().doubleValue());
+                aux.getTarget().setVisited(true);
                 solution=world_Trip_ft(from,aux.getTarget().getElement(),solution,n-2,cmp,days);
+                aux.getTarget().setVisited(false);
                 solution.removeFlight();
                 aux.setVisited(false);
             }
@@ -339,14 +342,16 @@ public class FlightGraph extends Graph<Airport, Flight> {
                 solution.addFlight(aux, (aux.getData().getFlightDuration()).doubleValue());
                 if (solution.betterThanBest()) {
                     if (!aux.getTarget().getVisited()) {
+                        aux.getTarget().setVisited(true);
                         solution = world_Trip_ft(from, aux.getTarget().getElement(), solution, n - 1, cmp,days);
+                        aux.getTarget().setVisited(false);
                     } else solution = world_Trip_ft(from, aux.getTarget().getElement(), solution, n, cmp, days);
                 }
                 solution.removeFlight();
                 aux.setVisited(false);
             }
         }
-        curr.setVisited(false);
+        //curr.setVisited(false);
         return solution;
     }
     private Solution world_Trip_tt(Airport from, Airport current, Solution solution, int n,
@@ -360,9 +365,10 @@ public class FlightGraph extends Graph<Airport, Flight> {
             return solution;
         }
 
-        curr.setVisited(true);
+        //curr.setVisited(true);
 
         if (curr.equals(origin) && n == this.nodes.size()) {
+            curr.setVisited(true);
             for (Arc<Airport, Flight> t : curr.getOutArcs()) {
                 if (t.getData().departureOnDate(days)) {
                     t.getData().setTagCurrentTime(t.getData().arrivalTime(0));
@@ -377,8 +383,10 @@ public class FlightGraph extends Graph<Airport, Flight> {
             while (!pq.isEmpty()) {
                 Arc<Airport, Flight> aux = pq.poll();
                 aux.setVisited(true);
+                aux.getTarget().setVisited(true);
                 solution.addFlight(aux, aux.getData().getFlightDuration().doubleValue());
                 solution = world_Trip_tt(from, aux.getTarget().getElement(), solution, n - 2, cmp, days);
+                aux.getTarget().setVisited(false);
                 solution.removeFlight();
                 aux.setVisited(false);
             }
@@ -397,7 +405,9 @@ public class FlightGraph extends Graph<Airport, Flight> {
                 solution.addFlight(aux, (double)ArrivalTime);
                 if (solution.betterThanBest()) {
                     if (!aux.getTarget().getVisited()) {
+                        aux.getTarget().setVisited(true);
                         solution = world_Trip_tt(from, aux.getTarget().getElement(), solution, n - 1, cmp, days);
+                        aux.getTarget().setVisited(false);
                     } else {
                         solution = world_Trip_tt(from, aux.getTarget().getElement(), solution, n, cmp, days);
                     }
@@ -406,7 +416,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
                 aux.setVisited(false);
             }
         }
-        curr.setVisited(false);
+        //curr.setVisited(false);
         return solution;
     }
 
