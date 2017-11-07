@@ -1,7 +1,7 @@
 package Model;
 
 public enum  FlightPriority {
-    TIME(0), PRICE(1), TOTAL_TIME(2);
+    TIME(0), PRICE(1), TOTAL_TIME(0);
 
     private int value;
 

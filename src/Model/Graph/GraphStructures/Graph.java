@@ -89,6 +89,9 @@ public class  Graph<T,V> {
         return arcs.keySet();
     }
 
+    public boolean cointainsNode(Node<T,V> n){
+        return nodes.containsKey(n);
+    }
 
     public Collection<Arc<T,V>> getArcs(){
         return arcs.values();

@@ -15,6 +15,10 @@ public class FlightGraph extends Graph<Airport, Flight> {
     }
 
 
+    public boolean contains(Airport n){
+       return nodes.containsKey(n);
+    }
+
     public List<Arc<Airport, Flight>> minPath(Airport from, Airport to, ArcInterface<Arc<Airport, Flight>> arcInt,
                                               Comparator<Arc<Airport, Flight>> cmp, List<Day> days) {
 
@@ -58,13 +62,15 @@ public class FlightGraph extends Graph<Airport, Flight> {
             }
             if (!aux.node.getVisited()) {
                 aux.node.setVisited(true);
-                for (Node<Airport, Flight> n : (Set<Node<Airport, Flight>>) aux.node.getAdjacents()) {
-                    Arc<Airport, Flight> r = (Arc<Airport, Flight>) aux.node.getTree(n, cmp).get(0);
-                    if (!r.getTarget().getVisited())
+                for (Node<Airport, Flight> n :  aux.node.getAdjacents()) {
+                    Arc<Airport, Flight> r =  aux.node.getTree(n, cmp).get(0);
+                    if (!r.getTarget().getVisited()) {
                         aux.usedArcs.add(r);
-                    r.getData().setTagCurrentTime(r.getData().arrivalTime(aux.usedArcs.get(aux.usedArcs.size() - 1).getData().getTagCurrentTime()));
-                    pq.offer(new Graph.PQNode(r.getTarget(), (arcInt.convert(r) - aux.distance) + aux.distance, aux.usedArcs));
+                        r.getData().setTagCurrentTime(r.getData().arrivalTime(aux.usedArcs.get(aux.usedArcs.size() - 1).getData().getTagCurrentTime()));
+                        pq.offer(new Graph.PQNode(r.getTarget(), (arcInt.convert(r) - aux.distance) + aux.distance, aux.usedArcs));
+                    }
                 }
+
             }
         }
 
@@ -143,6 +149,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
 
 
                 }
+
             }
         }
         return null;
@@ -234,9 +241,10 @@ public class FlightGraph extends Graph<Airport, Flight> {
         }
 
         PriorityQueue<Arc<Airport,Flight>> pq = new PriorityQueue<>(cmp);
-        curr.setVisited(true);
+        //curr.setVisited(true);
 
         if (curr.equals(origin) && n==this.nodes.size()){
+            curr.setVisited(true);
             for (Arc<Airport, Flight> t : curr.getOutArcs()) {
                 if (t.getData().departureOnDate(days)) {
                     pq.offer(t);
@@ -250,10 +258,12 @@ public class FlightGraph extends Graph<Airport, Flight> {
             while (!pq.isEmpty()){
                 Arc<Airport,Flight> aux=pq.poll();
                 aux.setVisited(true);
+                aux.getTarget().setVisited(true);
                 solution.addFlight(aux,aux.getData().getPrice().doubleValue());
                 solution=world_Trip_pr(from,aux.getTarget().getElement(),solution,n-2,cmp,days);
                 solution.removeFlight();
                 aux.setVisited(false);
+                aux.getTarget().setVisited(false);
             }
             return solution;
         }
@@ -268,7 +278,9 @@ public class FlightGraph extends Graph<Airport, Flight> {
                 solution.addFlight(aux, (aux.getData().getPrice()).doubleValue());
                 if (solution.betterThanBest()) {
                     if (!aux.getTarget().getVisited()) {
+                        aux.getTarget().setVisited(true);
                         solution = world_Trip_pr(from, aux.getTarget().getElement(), solution, n - 1, cmp,days);
+                        aux.getTarget().setVisited(false);
                     } else {
                         solution = world_Trip_pr(from, aux.getTarget().getElement(), solution, n, cmp,days);
                     }
@@ -277,7 +289,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
                 aux.setVisited(false);
             }
         }
-        curr.setVisited(false);
+        //curr.setVisited(false);
         return solution;
     }
 
@@ -449,6 +461,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
         public void updateSolution(){
             if (betterThanBest()){
                 this.solution=true;
+                bestTrip.clear();
                 Deque<Arc<Airport,Flight>> aux=new LinkedList<>();
                 while(!currentTrip.isEmpty()){
                     aux.push(currentTrip.pop());

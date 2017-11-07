@@ -75,10 +75,13 @@ public class AirportManager {
                           int departureTime, int flightDuration, double price) {
         try {
             for (Day day: Day.getDays(days)) {
+                Airport orig = new Airport(origin);
+                Airport dest = new Airport(target);
+                if(airportMap.contains(orig) && airportMap.contains(dest) ) {
+                    Flight flight = new Flight(airline, flightNumber, day, departureTime, flightDuration, price);
+                    airportMap.addArc(flight, orig, dest);
 
-                Flight flight = new Flight(airline, flightNumber, day, departureTime, flightDuration, price);
-                airportMap.addArc(flight, airportMap.getNodeElement(new Airport(origin)),
-                        airportMap.getNodeElement(new Airport(target)));
+                }
             }
 
         } catch (IllegalFormatException e) {
@@ -107,7 +110,7 @@ public class AirportManager {
     public List<Arc<Airport,Flight>> findRoute(String origin, String dest, FlightPriority priority,
                                                List<Day> departureDays) {
         int index = priority.getValue();
-        if(priority == FlightPriority.TOTAL_TIME) {
+        if(priority == FlightPriority.TIME) {
             return airportMap.minTotalTimePath(airportMap.getNodeElement(new Airport(origin)),
                     airportMap.getNodeElement(new Airport(dest)), comparators.get(0), departureDays);
         }
@@ -116,6 +119,8 @@ public class AirportManager {
                     airportMap.getNodeElement(new Airport(dest)), interfaces.get(index), comparators.get(index),
                     departureDays);
         }
+
+
     }
     public List<Arc<Airport, Flight>> world_trip(String origin, FlightPriority priority, List<Day> departureDays) {
         int index = priority.getValue();
@@ -159,7 +164,7 @@ public class AirportManager {
 
         a.addFlight("san", "3",days,"BRA","URU",14*60,1*60,100 );
 
-        a.addFlight("san", "4",days,"BRA","URU",14*60,1*60,100 );
+        a.addFlight("san", "4",days,"URU","BRA",14*60,1*60,100 );
 
         a.addFlight("san", "5",days,"ARG","CHI",20*60,13*60,1500 );
 
@@ -169,11 +174,14 @@ public class AirportManager {
 
         a.addFlight("san", "9",days,"CHI","PAR",9*60,1*60,500 );
 
-        a.addFlight("san", "10",days,"BRA","URU",14*60,1*60,100 );
+        a.addFlight("san", "10",days,"BRA","PAR",14*60,1*60,100 );
 
-        a.addFlight("san", "10",tu,"PAR","BRA",11*60,2*60,100 );
+        a.addFlight("san", "11",tu,"PAR","BRA",11*60,2*60,100 );
 
-        Airport from = new Airport("ARG");
+        a.addFlight("san", "12",tu,"BRA","URU",15*60,1*60,100 );
+
+        a.addFlight("san", "13",tu,"URU","CHI",18*60,2*60,1900 );
+        Airport from = new Airport("URU");
         Airport to = new Airport("CHI");
         ArcInterface<Arc<Airport,Flight>> arcint = new ArcInterface<Arc<Airport,Flight>>(){
             public double convert(Arc<Airport,Flight> arc ){
@@ -185,8 +193,10 @@ public class AirportManager {
         ldays.add(Day.getDay(0));
         ldays.add(Day.getDay(1));
 
-        //List<Arc<Airport,Flight>> route = a.findRoute("ARG", "CHI", FlightPriority.TOTAL_TIME, ldays);
+        List<Arc<Airport,Flight>> route = a.findRoute("URU", "CHI", FlightPriority.TOTAL_TIME, ldays);
+
         FileManager fm = new FileManager("src/test.txt", a);
+        //fm.writeRoute(a.findRoute("ARG","CHI",FlightPriority.TOTAL_TIME,ldays), "stdout", FileFormat.TEXT);
 
         //fm.writeRoute(route,"stdout", FileFormat.TEXT);
         ArrayList<Day> wtdays = new ArrayList<>();
