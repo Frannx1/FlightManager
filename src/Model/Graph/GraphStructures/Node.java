@@ -84,7 +84,7 @@ public class Node<T,V> {
         }
     }
 
-    public SortedList<Arc<T,V>> getTree(Node<T,V> node, Comparator<Arc<T,V>> cmp) {
+    public SortedList<Arc<T,V>> getList(Node<T,V> node, Comparator<Arc<T,V>> cmp) {
         return outArcsMap.get(node).get(comparators.indexOf(cmp));
     }
 

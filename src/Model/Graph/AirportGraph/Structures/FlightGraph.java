@@ -45,9 +45,9 @@ public class FlightGraph extends Graph<Airport, Flight> {
         origin.setVisited(true);
 
         for (Node<Airport, Flight> n : origin.getAdjacents()) {
-            for(Arc<Airport, Flight> r : origin.getTree(n, cmp)) {
+            for(Arc<Airport, Flight> r : origin.getList(n, cmp)) {
                 if (r.getData().departureOnDate(days)) {
-                    List<Arc<Airport, Flight>> path = new ArrayList<>();
+                    List<Arc<Airport, Flight>> path = new LinkedList<>();
                     path.add(r);
                     r.getData().setTagCurrentTime(r.getData().arrivalTime(0));
                     pq.offer(new PQNode(n, arcInt.convert(r), path));
@@ -71,10 +71,10 @@ public class FlightGraph extends Graph<Airport, Flight> {
             if (!aux.node.getVisited()) {
                 aux.node.setVisited(true);
                 for (Node<Airport, Flight> n :  aux.node.getAdjacents()) {
-                    Arc<Airport, Flight> r =  aux.node.getTree(n, cmp).get(0);
+                    Arc<Airport, Flight> r =  aux.node.getList(n, cmp).get(0);
                     if (!r.getTarget().getVisited()) {
                         r.getData().setTagCurrentTime(r.getData().arrivalTime(aux.usedArcs.get(aux.usedArcs.size() - 1).getData().getTagCurrentTime()));
-                        List<Arc<Airport,Flight>> newPath = new ArrayList<>();
+                        List<Arc<Airport,Flight>> newPath = new LinkedList<>();
                         newPath.addAll(aux.usedArcs);
                         newPath.add(r);
                         pq.offer(new Graph.PQNode(r.getTarget(),arcInt.convert(r) , newPath));
@@ -89,8 +89,74 @@ public class FlightGraph extends Graph<Airport, Flight> {
     }
 
 
+
+    public List<Arc<Airport, Flight>> minPathFlightTime(Airport from, Airport to,Comparator<Arc<Airport, Flight>> cmp, List<Day> days) {
+
+
+        if (from == null || to == null) {
+            throw new IllegalArgumentException("Bad input.");
+        }
+
+        if (!nodes.containsKey(from) || !nodes.containsKey(to)) {
+            return null;
+        }
+
+        clearMarks();
+        clearCurrentTime();
+        PriorityQueue<PQNode> pq = new PriorityQueue<>();
+
+        Node<Airport, Flight> origin = nodes.get(from);
+        origin.setVisited(true);
+
+        for (Node<Airport, Flight> n : origin.getAdjacents()) {
+            for(Arc<Airport, Flight> r : origin.getList(n, cmp)) {
+                if (r.getData().departureOnDate(days)) {
+                    List<Arc<Airport, Flight>> path = new LinkedList<>();
+                    path.add(r);
+                    r.getData().setTagCurrentTime(r.getData().arrivalTime(0));
+                    pq.offer(new PQNode(n, r.getData().getFlightDuration(), path));
+                    break;
+                }
+            }
+        }
+
+        if(pq.isEmpty()){
+            return null;
+        }
+
+        while(!pq.isEmpty()){
+
+            PQNode<Airport,Flight> aux = pq.poll();
+
+            if(aux.node.getElement().equals(to)){
+                return aux.usedArcs;
+            }
+
+            if(!aux.node.getVisited()) {
+                aux.node.setVisited(true);
+                for(Node n : aux.node.getAdjacents()){
+                    if(!n.getVisited()){
+                        Arc<Airport,Flight> r = (Arc<Airport,Flight>) aux.node.getList(n,cmp).get(0);
+                        r.getData().setTagCurrentTime(r.getData().arrivalTime(aux.usedArcs.get(aux.usedArcs.size()-1).getData().getTagCurrentTime()));
+                        List<Arc<Airport,Flight>> newPath = new LinkedList<>();
+                        newPath.addAll(aux.usedArcs);
+                        newPath.add(r);
+                        pq.offer(new PQNode(n, aux.distance + r.getData().getFlightDuration(),newPath ));
+                    }
+                }
+            }
+
+        }
+        return null;
+
+
+    }
+
+
+
+
     public List<Arc<Airport, Flight>> minTotalTimePath(Airport from, Airport to,
-                                                       Comparator<Arc<Airport, Flight>> cmp, List<Day> days) {
+                                                   Comparator<Arc<Airport, Flight>> cmp, List<Day> days) {
 
         if (from == null || to == null) {
             throw new IllegalArgumentException("Bad input.");
@@ -110,7 +176,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
 
           Set<Node<Airport, Flight>> s = origin.getAdjacents();
         for (Node<Airport, Flight> n : s) {
-            for(Arc<Airport, Flight> r : origin.getTree(n, cmp)) {
+            for(Arc<Airport, Flight> r : origin.getList(n, cmp)) {
                 if (r.getData().departureOnDate(days)) {
                     List<Arc<Airport, Flight>> path = new ArrayList<>();
                     path.add(r);
@@ -135,13 +201,13 @@ public class FlightGraph extends Graph<Airport, Flight> {
                 for (Node<Airport, Flight> n : aux.node.getAdjacents()) {
                     // verify the node is indeed not visited
                     if (!n.getVisited()) {
-                        Arc<Airport, Flight> bestFlightToNode = aux.node.getTree(n, cmp).get(0);
+                        Arc<Airport, Flight> bestFlightToNode = aux.node.getList(n, cmp).get(0);
                         int bestArrivalTime = bestFlightToNode.getData().arrivalTime(aux.usedArcs.get(aux.usedArcs.size() - 1).getData().getTagCurrentTime());
                         int currentTime = aux.usedArcs.get(aux.usedArcs.size() - 1).getData().getTagCurrentTime();
 
                         int addedTime = bestArrivalTime - currentTime;
                         // we search for the best time in regard to the arrival time
-                        for (Arc<Airport, Flight> r : aux.node.getTree(n, cmp)) {
+                        for (Arc<Airport, Flight> r : aux.node.getList(n, cmp)) {
                             // aux.distance is the current time of the week at which the algorithm expects to be
                             // en criollo , es el momento de la semana en que estas cuando llegas a este nodo
 
@@ -166,7 +232,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
 
             }
         }
-        return null;
+    return null;
     }
 
     protected class PQTimeNode<T, V> implements Comparable<PQTimeNode> {
