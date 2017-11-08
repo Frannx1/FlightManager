@@ -24,7 +24,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
        return nodes.containsKey(n);
     }
 
-    public List<Arc<Airport, Flight>> minPath(Airport from, Airport to, ArcInterface<Arc<Airport, Flight>> arcInt,
+    public List<Arc<Airport, Flight>> minPathPrice(Airport from, Airport to,
                                               Comparator<Arc<Airport, Flight>> cmp, List<Day> days) {
 
 
@@ -50,7 +50,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
                     List<Arc<Airport, Flight>> path = new LinkedList<>();
                     path.add(r);
                     r.getData().setTagCurrentTime(r.getData().arrivalTime(0));
-                    pq.offer(new PQNode(n, arcInt.convert(r), path));
+                    pq.offer(new PQNode(n,r.getData().getPrice(), path));
                     break;
                 }
             }
@@ -77,7 +77,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
                         List<Arc<Airport,Flight>> newPath = new LinkedList<>();
                         newPath.addAll(aux.usedArcs);
                         newPath.add(r);
-                        pq.offer(new Graph.PQNode(r.getTarget(),arcInt.convert(r) , newPath));
+                        pq.offer(new Graph.PQNode(r.getTarget(),r.getData().getPrice()+ aux.distance , newPath));
                     }
                 }
 
@@ -198,14 +198,16 @@ public class FlightGraph extends Graph<Airport, Flight> {
             }
             if (!aux.node.getVisited()) {
                 aux.node.setVisited(true);
+                int currentTime = aux.usedArcs.get(aux.usedArcs.size() - 1).getData().getTagCurrentTime();
                 for (Node<Airport, Flight> n : aux.node.getAdjacents()) {
                     // verify the node is indeed not visited
                     if (!n.getVisited()) {
                         Arc<Airport, Flight> bestFlightToNode = aux.node.getList(n, cmp).get(0);
-                        int bestArrivalTime = bestFlightToNode.getData().arrivalTime(aux.usedArcs.get(aux.usedArcs.size() - 1).getData().getTagCurrentTime());
-                        int currentTime = aux.usedArcs.get(aux.usedArcs.size() - 1).getData().getTagCurrentTime();
+                        int bestArrivalTime = bestFlightToNode.getData().arrivalTime(currentTime);
+
 
                         int addedTime = bestArrivalTime - currentTime;
+
                         // we search for the best time in regard to the arrival time
                         for (Arc<Airport, Flight> r : aux.node.getList(n, cmp)) {
                             // aux.distance is the current time of the week at which the algorithm expects to be
@@ -221,10 +223,10 @@ public class FlightGraph extends Graph<Airport, Flight> {
                             }
                         }
 
-                        List<Arc<Airport, Flight>>  usedArcs = new ArrayList<>();
+                        List<Arc<Airport, Flight>>  usedArcs = new LinkedList<>();
                         usedArcs.addAll(aux.usedArcs);
                         usedArcs.add(bestFlightToNode);
-                        pq.offer(new PQTimeNode(bestFlightToNode.getTarget(), addedTime, usedArcs));
+                        pq.offer(new PQTimeNode(bestFlightToNode.getTarget(), addedTime + aux.totalTime, usedArcs));
                     }
 
 

@@ -18,7 +18,7 @@ public class AirportManager {
 
     private FlightGraph airportMap;
     List<Comparator<Arc<Airport,Flight>>> comparators;
-    List<ArcInterface<Arc<Airport,Flight>>> interfaces;
+
 
     private Comparator<Arc<Airport,Flight>> cmpFlightDuration = new Comparator<Arc<Airport,Flight>>() {
         @Override
@@ -35,27 +35,12 @@ public class AirportManager {
     };
 
 
-    ArcInterface<Arc<Airport,Flight>> arcIntDuration = new ArcInterface<Arc<Airport,Flight>>(){
-        public double convert(Arc<Airport,Flight> arc ){
-            return (double) arc.getData().getFlightDuration();
-        }
-    };
-
-    ArcInterface<Arc<Airport,Flight>> arcIntPrice = new ArcInterface<Arc<Airport,Flight>>(){
-        public double convert(Arc<Airport,Flight> arc ){
-            return arc.getData().getPrice();
-
-        }
-    };
-
     public AirportManager() {
         comparators = new ArrayList<>();
         comparators.add(cmpFlightDuration);
         comparators.add(cmpPrecio);
 
-        interfaces = new ArrayList<>();
-        interfaces.add(arcIntDuration);
-        interfaces.add(arcIntPrice);
+
 
         airportMap = new FlightGraph(comparators);
     }
@@ -119,8 +104,8 @@ public class AirportManager {
                     airportMap.getNodeElement(new Airport(dest)), comparators.get(0),
                     departureDays);
         }else{
-            return airportMap.minPath(airportMap.getNodeElement(new Airport(origin)),
-                    airportMap.getNodeElement(new Airport(dest)), interfaces.get(1), comparators.get(1),
+            return airportMap.minPathPrice(airportMap.getNodeElement(new Airport(origin)),
+                    airportMap.getNodeElement(new Airport(dest)), comparators.get(1),
                     departureDays);
         }
 

@@ -72,7 +72,7 @@ public class Flight {
     }
 
     public int arrivalTime(int currentTime){
-        return Day.arrivalTime(currentTime, day, departureTime, flightDuration);
+        return Day.arrivalTime(currentTime, day, departureTime, flightDuration) + currentTime;
     }
 
     public String toString(){

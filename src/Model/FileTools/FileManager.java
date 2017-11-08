@@ -205,7 +205,7 @@ public class FileManager {
                 System.out.println("</kml>");
             } else {
                 try {
-                    output = output.concat(".kml");
+                    //output = output.concat(".kml");
                     File toWrite = new File(path,output);
                     if(toWrite.exists()){
                         toWrite.delete();
