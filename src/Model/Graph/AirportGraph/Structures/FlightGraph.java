@@ -9,6 +9,11 @@ import Model.Graph.GraphStructures.Node;
 import java.util.*;
 
 public class FlightGraph extends Graph<Airport, Flight> {
+    public void clearCurrentTime(){
+        for(Arc<Airport,Flight> r : getArcs()){
+            r.getData().setTagCurrentTime(0);
+        }
+    }
 
     public FlightGraph(List<Comparator<Arc<Airport, Flight>>> comparators) {
         super(comparators);
@@ -32,6 +37,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
         }
 
         clearMarks();
+        clearCurrentTime();
         PriorityQueue<PQNode> pq = new PriorityQueue<>();
 
 
@@ -39,12 +45,14 @@ public class FlightGraph extends Graph<Airport, Flight> {
         origin.setVisited(true);
 
         for (Node<Airport, Flight> n : origin.getAdjacents()) {
-            Arc<Airport, Flight> r = origin.getTree(n, cmp).get(0);
-            if (r.getData().departureOnDate(days)) {
-                List<Arc<Airport, Flight>> path = new ArrayList<>();
-                path.add(r);
-                r.getData().setTagCurrentTime(r.getData().arrivalTime(0));
-                pq.offer(new PQNode(n, arcInt.convert(r), path));
+            for(Arc<Airport, Flight> r : origin.getTree(n, cmp)) {
+                if (r.getData().departureOnDate(days)) {
+                    List<Arc<Airport, Flight>> path = new ArrayList<>();
+                    path.add(r);
+                    r.getData().setTagCurrentTime(r.getData().arrivalTime(0));
+                    pq.offer(new PQNode(n, arcInt.convert(r), path));
+                    break;
+                }
             }
         }
 
@@ -65,9 +73,11 @@ public class FlightGraph extends Graph<Airport, Flight> {
                 for (Node<Airport, Flight> n :  aux.node.getAdjacents()) {
                     Arc<Airport, Flight> r =  aux.node.getTree(n, cmp).get(0);
                     if (!r.getTarget().getVisited()) {
-                        aux.usedArcs.add(r);
                         r.getData().setTagCurrentTime(r.getData().arrivalTime(aux.usedArcs.get(aux.usedArcs.size() - 1).getData().getTagCurrentTime()));
-                        pq.offer(new Graph.PQNode(r.getTarget(), (arcInt.convert(r) - aux.distance) + aux.distance, aux.usedArcs));
+                        List<Arc<Airport,Flight>> newPath = new ArrayList<>();
+                        newPath.addAll(aux.usedArcs);
+                        newPath.add(r);
+                        pq.offer(new Graph.PQNode(r.getTarget(),arcInt.convert(r) , newPath));
                     }
                 }
 
@@ -91,6 +101,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
         }
 
         clearMarks();
+        clearCurrentTime();
         PriorityQueue<PQTimeNode> pq = new PriorityQueue<>();
 
 
@@ -99,13 +110,15 @@ public class FlightGraph extends Graph<Airport, Flight> {
 
           Set<Node<Airport, Flight>> s = origin.getAdjacents();
         for (Node<Airport, Flight> n : s) {
-            Arc<Airport, Flight> r = origin.getTree(n, cmp).get(0);
-            if (r.getData().departureOnDate(days)) {
-                List<Arc<Airport, Flight>> path = new ArrayList<>();
-                path.add(r);
-                Flight f = r.getData();
-                r.getData().setTagCurrentTime(f.arrivalTime(0));// this gives me the current time of the week we flight started
-                pq.offer(new PQTimeNode(n, r.getData().getFlightDuration(), path));
+            for(Arc<Airport, Flight> r : origin.getTree(n, cmp)) {
+                if (r.getData().departureOnDate(days)) {
+                    List<Arc<Airport, Flight>> path = new ArrayList<>();
+                    path.add(r);
+                    Flight f = r.getData();
+                    r.getData().setTagCurrentTime(f.arrivalTime(0));// this gives me the current time of the week we flight started
+                    pq.offer(new PQTimeNode(n, r.getData().getFlightDuration(), path));
+                    break;
+                }
             }
         }
 
@@ -141,6 +154,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
                                 addedTime = bestArrivalTime - currentTime;
                             }
                         }
+
                         List<Arc<Airport, Flight>>  usedArcs = new ArrayList<>();
                         usedArcs.addAll(aux.usedArcs);
                         usedArcs.add(bestFlightToNode);

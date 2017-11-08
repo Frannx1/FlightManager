@@ -110,7 +110,7 @@ public class AirportManager {
     public List<Arc<Airport,Flight>> findRoute(String origin, String dest, FlightPriority priority,
                                                List<Day> departureDays) {
         int index = priority.getValue();
-        if(priority == FlightPriority.TIME) {
+        if(priority == FlightPriority.TOTAL_TIME) {
             return airportMap.minTotalTimePath(airportMap.getNodeElement(new Airport(origin)),
                     airportMap.getNodeElement(new Airport(dest)), comparators.get(0), departureDays);
         }
@@ -156,7 +156,7 @@ public class AirportManager {
         tu[0] = "Ma";
         tu[1]  = "Lu";
 
-        a.addFlight("san", "6",tu,"ARG","PAR",10*60,1*60,700 );
+        a.addFlight("san", "6",days,"ARG","PAR",10*60,1*60,700 );
 
         a.addFlight("san", "1",days,"ARG","BRA",7*60,7*60,400 );
 
@@ -176,11 +176,11 @@ public class AirportManager {
 
         a.addFlight("san", "10",days,"BRA","PAR",14*60,1*60,100 );
 
-        a.addFlight("san", "11",tu,"PAR","BRA",11*60,2*60,100 );
+        a.addFlight("san", "11",days,"PAR","BRA",11*60,2*60,100 );
 
-        a.addFlight("san", "12",tu,"BRA","URU",15*60,1*60,100 );
+        a.addFlight("san", "12",days,"BRA","URU",15*60,1*60,100 );
 
-        a.addFlight("san", "13",tu,"URU","CHI",18*60,2*60,1900 );
+        a.addFlight("san", "13",days,"URU","CHI",18*60,2*60,1900 );
         Airport from = new Airport("URU");
         Airport to = new Airport("CHI");
         ArcInterface<Arc<Airport,Flight>> arcint = new ArcInterface<Arc<Airport,Flight>>(){
@@ -192,17 +192,27 @@ public class AirportManager {
         List<Day> ldays = new ArrayList<>();
         ldays.add(Day.getDay(0));
         ldays.add(Day.getDay(1));
-
-        List<Arc<Airport,Flight>> route = a.findRoute("URU", "CHI", FlightPriority.TOTAL_TIME, ldays);
+        System.out.println("flight time");
+        List<Arc<Airport,Flight>> route = a.findRoute("BRA", "CHI", FlightPriority.TIME, ldays);
 
         FileManager fm = new FileManager("src/test.txt", a);
-        //fm.writeRoute(a.findRoute("ARG","CHI",FlightPriority.TOTAL_TIME,ldays), "stdout", FileFormat.TEXT);
+        //System.out.println(route);
+        fm.writeRoute(route,"stdout", FileFormat.TEXT);
 
-        //fm.writeRoute(route,"stdout", FileFormat.TEXT);
+        System.out.println("total time");
+        route = a.findRoute("BRA", "CHI", FlightPriority.TOTAL_TIME, ldays);
+        fm.writeRoute(route,"stdout", FileFormat.TEXT);
+        //System.out.println(route);
+
+        System.out.println("flight price");
+        route = a.findRoute("BRA", "CHI", FlightPriority.PRICE, ldays);
+        fm.writeRoute(route,"stdout", FileFormat.TEXT);
+        //System.out.println(route);
+
         ArrayList<Day> wtdays = new ArrayList<>();
         wtdays.add(Day.getDay(1));
         wtdays.add(Day.getDay(2));
-        fm.writeRoute(a.world_trip("ARG", FlightPriority.PRICE, wtdays),"stdout",FileFormat.TEXT);
+        //fm.writeRoute(a.world_trip("ARG", FlightPriority.PRICE, wtdays),"stdout",FileFormat.TEXT);
         FileManager fm2 = new FileManager("src/test.txt", a);
    }
 
