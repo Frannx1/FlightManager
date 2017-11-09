@@ -45,8 +45,6 @@ public class Parser {
                 "#fileFormat {text|KML}\n" +
                 "#output {stdout|file [fileName]}\n" +
                 "#worldTrip src=[airport] priority={ft|pr|tt} *weekdays=[weekDays]\n"+
-                "#load\n" +
-                "#exit&save\n" +
                 "#quit";
         String helpExpReg = "[hH]";
         String addAirportExpReg = "insert airport [a-z A-Z]{1,3} -?[0-9]+\\.[0-9]+ -?[0-9]+\\.[0-9]+";
@@ -61,8 +59,6 @@ public class Parser {
         String fileFormatExpReg = "fileFormat ((text)|(KML))";
         String outputExpReg = "output stdout";
         String outputFileExpReg = "output file [a-z A-Z 0-9]+\\.(txt|kml)$";
-        String exitSaveExpReg = "exit&save";
-        String loadExpReg = "load";
         String quitExpReg = "quit";
         String wordltripReg = "worldTrip src=[a-z A-Z 0-9]{3} priority=(pr|tt|ft)( weekdays=(Lu|Ma|Mi|Ju|Vi|Sa|Do)(-(Lu|Ma|Mi|Ju|Vi|Sa|Do))*)?$";
 
@@ -180,13 +176,6 @@ public class Parser {
 
 
                 return false;
-            } else if (Pattern.matches(loadExpReg, command)) {
-                fileManager.load(airportFile, flightFile);
-            } else if (Pattern.matches(exitSaveExpReg, command)) {
-                fileManager.deleteOldAirportFile(airportFile);
-                fileManager.deleteOldFlightFile(flightFile);
-                fileManager.saveFile(airportFile, flightFile);
-                return true;
             } else if (Pattern.matches(quitExpReg, command)) {
                 System.out.println("Quiting...");
                 return true;

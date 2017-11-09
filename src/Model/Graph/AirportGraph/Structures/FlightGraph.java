@@ -38,6 +38,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
 
         clearMarks();
         clearCurrentTime();
+
         PriorityQueue<PQNode> pq = new PriorityQueue<>();
 
 
@@ -68,6 +69,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
 
                 return aux.usedArcs;
             }
+
             if (!aux.node.getVisited()) {
                 aux.node.setVisited(true);
                 for (Node<Airport, Flight> n :  aux.node.getAdjacents()) {
@@ -426,6 +428,7 @@ public class FlightGraph extends Graph<Airport, Flight> {
             }
             return solution;
         }
+        return  solution;
     }
     private Solution world_Trip_tt(Airport from, Airport current, Solution solution, int n,
                                            Comparator<Arc<Airport,Flight>>cmp, List<Day> days) {
