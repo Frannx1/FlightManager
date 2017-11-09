@@ -44,6 +44,7 @@ public class Parser {
                 "#findRoute src=[origin] dst=[target] priority={ft|pr|tt} *weekdays=[weekDays]\n" +
                 "#fileFormat {text|KML}\n" +
                 "#output {stdout|file [fileName]}\n" +
+                "#worldTrip src=[airport] priority={ft|pr|tt} *weekdays=[weekDays]\n"+
                 "#load\n" +
                 "#exit&save\n" +
                 "#quit";
@@ -63,6 +64,7 @@ public class Parser {
         String exitSaveExpReg = "exit&save";
         String loadExpReg = "load";
         String quitExpReg = "quit";
+        String wordltripReg = "worldTrip src=[a-z A-Z 0-9]{3} priority=(pr|tt|ft)( weekdays=(Lu|Ma|Mi|Ju|Vi|Sa|Do)(-(Lu|Ma|Mi|Ju|Vi|Sa|Do))*)?$";
 
         if (Pattern.matches(helpExpReg, command)) {
             System.out.println(CONSOLE_MESSAGE);
@@ -188,7 +190,46 @@ public class Parser {
             } else if (Pattern.matches(quitExpReg, command)) {
                 System.out.println("Quiting...");
                 return true;
-            } else
+            }else if(Pattern.matches(wordltripReg,command)) {
+                String[] res = command.split(" ");
+                String source = res[1].split("=")[1];
+                String p = res[2].split("=")[1];
+
+
+                FlightPriority priority;
+                if (output == null || fileFormat == null) {
+                    if (output != null)
+                        System.out.println("You must set the format of the output.");
+                    else
+                        System.out.println("You must specified the path for the output file.");
+                    return false;
+                }
+                if (p.equals("ft"))
+                    priority = FlightPriority.TIME;
+                else if (p.equals("pr"))
+                    priority = FlightPriority.PRICE;
+                else
+                    priority = FlightPriority.TOTAL_TIME;
+
+                if (res.length == 4) {
+                    String[] days = res[3].split("=");
+                    days = days[1].split("-");
+                    if (!Day.checkDays(days)) {
+                        System.out.println("Repeated days.");
+                        return false;
+                    }
+                    List<Day> newDays = Day.getDays(days);
+                    List<Arc<Airport, Flight>> list = airportManager.world_trip(source, priority, newDays);
+
+                    fileManager.writeRoute(list, output, fileFormat);
+            } else {
+                List<Arc<Airport, Flight>> list = airportManager.world_trip(source, priority, Day.getAllDays());
+                fileManager.writeRoute(list, output, fileFormat);
+                return false;
+            }
+
+
+        }else
                 System.out.println("Command not valid." );
 
                 return false;
