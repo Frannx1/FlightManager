@@ -543,17 +543,10 @@ public class FlightGraph extends Graph<Airport, Flight> {
             }
             return;
         }
-
-        public List<Arc<Airport,Flight>> toList(){
-            Deque<Arc<Airport,Flight>> aux=new LinkedList<>();
-            while(!bestTrip.isEmpty()){
-                aux.push(bestTrip.pop());
-            }
+       public List<Arc<Airport,Flight>> toList(){
             List<Arc<Airport,Flight>> solutionTrip=new LinkedList<>();
-            while(!aux.isEmpty()){
-                Arc<Airport,Flight> ArcAux=aux.pop();
-                bestTrip.push(ArcAux);
-                solutionTrip.add(ArcAux);
+            while(!bestTrip.isEmpty()){
+                solutionTrip.add(bestTrip.removeLast());
             }
             return solutionTrip;
         }
